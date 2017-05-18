@@ -11,6 +11,7 @@
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include "utility.hpp"
+#include "WaveFrontReader.h"
 
 using namespace DirectX;
 
@@ -33,6 +34,7 @@ private:
 	ID3D11Buffer *vertex_buffer_;
 	ID3D11Buffer *index_buffer_;
 	int index_count_;
+	UINT stride_;
 public:
 	Model() {
 		vertex_buffer_ = index_buffer_ = nullptr; index_count_ = 0;
@@ -40,6 +42,7 @@ public:
 	~Model();
 
 	HRESULT InitFromTxt(char *txt_file);
+	HRESULT InitFromObj(const wchar_t *obj_file);
 	void Render();
 
 	ID3D11Buffer *get_vertex_buffer() const { return vertex_buffer_; }

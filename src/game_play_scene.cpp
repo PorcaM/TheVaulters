@@ -13,7 +13,7 @@ void GamePlayScene::UpdateCamera() {
 	float x = player_unit_->get_transform().position_.x;
 	float y = player_unit_->get_transform().position_.y;
 	float z = player_unit_->get_transform().position_.z;
-	XMVECTOR newEye = XMVectorSet(x, y, z - 30.0f, 0.0f);
+	XMVECTOR newEye = XMVectorSet(x - 20, y + 70, z - 80.0f, 0.0f);
 	camera_.Eye = newEye;
 
 	// Update camera position to directx
@@ -27,9 +27,10 @@ HRESULT GamePlayScene::Init(){
 
 	// Init models
 	model_list_.push_back(new Model());
-	model_list_[0]->InitFromTxt("model/tube.txt");
+	//model_list_[0]->InitFromTxt("model/tube.txt");
+	model_list_[0]->InitFromObj(L"model/low_poly_sphere.obj");
 	model_list_.push_back(new Model());
-	model_list_[1]->InitFromTxt("model/star.txt");
+	model_list_[1]->InitFromObj(L"model/hexagon.obj");
 
 	// Init units
 	unit_list_.push_back(new Unit());
@@ -39,7 +40,6 @@ HRESULT GamePlayScene::Init(){
 
 	// Init player unit
 	player_unit_ = unit_list_[0];
-	// player_unit_->get_transform().position_.y = 10.0f;
 
 	// Init map
 	map_ = new Map();
