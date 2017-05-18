@@ -27,7 +27,6 @@ HRESULT GamePlayScene::Init(){
 
 	// Init models
 	model_list_.push_back(new Model());
-	//model_list_[0]->InitFromTxt("model/tube.txt");
 	model_list_[0]->InitFromObj(L"model/low_poly_sphere.obj");
 	model_list_.push_back(new Model());
 	model_list_[1]->InitFromObj(L"model/hexagon.obj");

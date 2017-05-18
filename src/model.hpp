@@ -41,7 +41,6 @@ public:
 	};
 	~Model();
 
-	HRESULT InitFromTxt(char *txt_file);
 	HRESULT InitFromObj(const wchar_t *obj_file);
 	void Render();
 

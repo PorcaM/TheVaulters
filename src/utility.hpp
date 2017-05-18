@@ -17,12 +17,6 @@
 using namespace DirectX;
 using namespace std;
 
-struct SimpleVertex
-{
-	XMFLOAT3 Pos;
-	XMFLOAT3 Normal;
-};
-
 struct ConstantBuffer
 {
 	XMMATRIX mWorld;
@@ -32,15 +26,3 @@ struct ConstantBuffer
 	XMFLOAT4 vLightColor[2];
 	XMFLOAT4 vOutputColor;
 };
-
-struct ModelType
-{
-	float x, y, z;
-	float tu, tv;
-	float nx, ny, nz;
-};
-
-extern ModelType* m_model;
-extern int m_vertexCount, m_indexCount;
-
-extern void LoadModel(char* filename);
