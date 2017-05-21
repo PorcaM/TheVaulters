@@ -23,9 +23,9 @@ void Physics::ScanCollision() {
 }
 
 bool Physics::IsCollision(Unit *u1, Unit *u2) {
-
+	return false;
 }
 
 void Physics::Reaction(Unit *u1, Unit *u2) {
-
+	
 }

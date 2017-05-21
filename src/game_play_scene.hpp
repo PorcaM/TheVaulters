@@ -52,6 +52,30 @@ private:
 	ModelList model_list_;
 	UnitList unit_list_;
 	Map *map_;
+	Physics physics_;
+
+	// Temporary variables for jump motion
+	bool jump_state = false;
+	float jump_delay = 0.016f;
+
+	float init_position = 0.0f;
+	float curr_position = 0.0f;
+
+	float acc = 2.0f;
+	float velo = 0.0f;
+	float gravity = -0.2f;
+
+	float curr_time = 0.0f;
+	float prev_time = 0.0f;
+
+	// Temporary variables for multi-key
+	bool vk_w = false;
+	bool vk_a = false;
+	bool vk_s = false;
+	bool vk_d = false;
+
+	// Temporary variables for move motion
+	float speed = 0.1f;
 public:
 	Unit *player_unit_;
 	XMFLOAT4 vLightDirs[2];
@@ -60,7 +84,10 @@ public:
 	GamePlayScene(){};
 	virtual HRESULT Init();
 	virtual void Render();
-	virtual void HandleInput(WPARAM w_param);
+	virtual void HandleInput(WPARAM w_param, LPARAM l_param, char input_device);
 	void UpdateCamera();
 	void RenderUnitList();
+
+	void jump_motion(float time);
+	void move_motion();
 };
