@@ -7,6 +7,12 @@
 
 #pragma once
 
+/**
+	@class	Physics
+	@date	2017/5/21
+	@author	¿Ãº∫¡ÿ
+	@brief
+*/
 class Physics {
 
 };

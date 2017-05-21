@@ -33,6 +33,9 @@ extern XMMATRIX                g_Projection;
 */
 class GamePlayScene : public Scene{
 private:
+	typedef vector<Model*> ModelList;
+	typedef vector<Unit*> UnitList;
+
 	struct Camera {
 		XMVECTOR Eye = XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
 		XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
@@ -45,8 +48,8 @@ private:
 	Camera camera_;
 	Theme theme_;
 	ConstantBuffer constant_buffer_;
-	vector<Model*> model_list_;
-	vector<Unit*> unit_list_;
+	ModelList model_list_;
+	UnitList unit_list_;
 	Map *map_;
 public:
 	Unit *player_unit_;

@@ -66,7 +66,7 @@ HRESULT GamePlayScene::Init(){
 }
 
 void GamePlayScene::RenderUnitList() {
-	for (vector<Unit*>::iterator it = unit_list_.begin();
+	for (UnitList::iterator it = unit_list_.begin();
 		it != unit_list_.end(); it++) {
 		(*it)->Render(&constant_buffer_);
 	}
