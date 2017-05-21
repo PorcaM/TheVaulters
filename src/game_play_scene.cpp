@@ -33,9 +33,13 @@ HRESULT GamePlayScene::Init(){
 
 	// Init units
 	unit_list_.push_back(new Unit());
+	unit_list_[0]->Init();
 	unit_list_[0]->set_model(model_list_[0]);
 	unit_list_.push_back(new Unit());
+	unit_list_[1]->Init();
 	unit_list_[1]->set_model(model_list_[0]);
+	unit_list_[1]->set_transform_position_x(30.0f);
+	unit_list_[1]->set_transform_position_z(30.0f);
 
 	// Init player unit
 	player_unit_ = unit_list_[0];
