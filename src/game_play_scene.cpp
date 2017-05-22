@@ -96,6 +96,12 @@ void GamePlayScene::Render() {
 		t = (timeCur - timeStart) / 1000.0f;
 	}
 
+	static float time_prev = 0.0f;
+	static float time_curr = 0.0f;
+	float delta_time = time_curr - time_prev;
+	time_prev = time_curr;
+	time_curr = t;
+
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color_);
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
@@ -103,8 +109,9 @@ void GamePlayScene::Render() {
 	if (jump_state) { jump_motion(t); }
 	move_motion();
 	physics_.ScanCollision();
-	physics_.Gravity(t);
-	physics_.Force(t);
+	
+	physics_.Gravity(delta_time);
+	physics_.Force(delta_time);
 
 	RenderUnitList();
 	map_->Render(&constant_buffer_);

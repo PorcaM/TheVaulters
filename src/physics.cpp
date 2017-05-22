@@ -26,12 +26,13 @@ void Physics::ScanCollision() {
 }
 
 void Physics::Gravity(float delta_time) {
+	static const float factor = 50.0f;
 	for (UnitList::iterator it = unit_list_->begin();
 		it != unit_list_->end(); it++) {
 		Unit *unit = *it;
 		Rigidbody rigidbody = unit->get_ridigbody();
 		if (unit->get_transform().position_.y > 0) {
-			rigidbody.v_.y -= graviational_acceleration_ * delta_time / 1000.0f;
+			rigidbody.v_.y -= graviational_acceleration_ * delta_time * factor;
 		}
 		else {
 			rigidbody.v_.y = 0;
