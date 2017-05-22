@@ -35,7 +35,7 @@ void Physics::Gravity(float delta_time) {
 			rigidbody.v_.y -= graviational_acceleration_ * delta_time * factor;
 		}
 		else {
-			rigidbody.v_.y = 0;
+			// rigidbody.v_.y = 0;
 		}
 		unit->set_rigidbody(rigidbody);
 	}
@@ -53,6 +53,10 @@ void Physics::Force(float delta_time) {
 		transform.position_.x += delta_x;
 		transform.position_.y += delta_y;
 		transform.position_.z += delta_z;
+		if (transform.position_.y < 0) {
+			transform.position_.y = 0;
+			rigidbody.v_.y = 0;
+		}
 		unit->set_transform(transform);
 	}
 }

@@ -12,6 +12,7 @@
 #include "rigidbody.hpp"
 
 extern XMMATRIX                g_World;
+extern D3D_DRIVER_TYPE         g_driverType;
 
 /**
 	@class	Unit
