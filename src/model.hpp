@@ -10,8 +10,8 @@
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
-#include "utility.hpp"
 #include "WaveFrontReader.h"
+#include "utility.hpp"
 
 using namespace DirectX;
 
