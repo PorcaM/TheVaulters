@@ -7,6 +7,8 @@
 
 #include "physics.hpp"
 
+const float Physics::graviational_acceleration_ = 9.8f;
+
 void Physics::ScanCollision() {
 	for (UnitList::iterator it = unit_list_->begin();
 		it != unit_list_->end(); it++) {
@@ -20,6 +22,37 @@ void Physics::ScanCollision() {
 				break;
 			}
 		}
+	}
+}
+
+void Physics::Gravity(float delta_time) {
+	for (UnitList::iterator it = unit_list_->begin();
+		it != unit_list_->end(); it++) {
+		Unit *unit = *it;
+		Rigidbody rigidbody = unit->get_ridigbody();
+		if (unit->get_transform().position_.y > 0) {
+			rigidbody.v_.y -= graviational_acceleration_ * delta_time / 1000.0f;
+		}
+		else {
+			rigidbody.v_.y = 0;
+		}
+		unit->set_rigidbody(rigidbody);
+	}
+}
+
+void Physics::Force(float delta_time) {
+	for (UnitList::iterator it = unit_list_->begin();
+		it != unit_list_->end(); it++) {
+		Unit *unit = *it;
+		Rigidbody rigidbody = unit->get_ridigbody();
+		float delta_x = rigidbody.v_.x * delta_time;
+		float delta_y = rigidbody.v_.y * delta_time;
+		float delta_z = rigidbody.v_.z * delta_time;
+		Transform transform = unit->get_transform();
+		transform.position_.x += delta_x;
+		transform.position_.y += delta_y;
+		transform.position_.z += delta_z;
+		unit->set_transform(transform);
 	}
 }
 

@@ -33,6 +33,7 @@ public:
 	Transform get_transform() const { return transform_; }
 	Rigidbody get_ridigbody() const { return rigidbody_; }
 	void set_transform(Transform transform) { transform_ = transform; }
+	void set_rigidbody(Rigidbody rigidbody) { rigidbody_ = rigidbody; }
 	void set_transform_rotation(XMFLOAT3 rotation) { transform_.rotation_ = rotation; }
 	void set_transform_position_x(float position_x) { transform_.position_.x = position_x; }
 	void set_transform_position_y(float position_y) { transform_.position_.y = position_y; }

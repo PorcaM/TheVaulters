@@ -35,6 +35,7 @@ HRESULT GamePlayScene::Init(){
 	unit_list_.push_back(new Unit());
 	unit_list_[0]->Init();
 	unit_list_[0]->set_model(model_list_[0]);
+	unit_list_[0]->set_transform_position_y(150.0f);
 	unit_list_.push_back(new Unit());
 	unit_list_[1]->Init();
 	unit_list_[1]->set_model(model_list_[0]);
@@ -102,6 +103,8 @@ void GamePlayScene::Render() {
 	if (jump_state) { jump_motion(t); }
 	move_motion();
 	physics_.ScanCollision();
+	physics_.Gravity(t);
+	physics_.Force(t);
 
 	RenderUnitList();
 	map_->Render(&constant_buffer_);

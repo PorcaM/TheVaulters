@@ -76,6 +76,16 @@ private:
 
 	// Temporary variables for move motion
 	float speed = 0.1f;
+
+	// Temporary variables for mouse action
+	float x_axis = 60.0f;
+	float y_axis = 1.0f;
+	float z_axis = -70.0f;
+
+	float rvelo = 0.5f;
+
+	XMMATRIX basic_rotation_matrix_;
+	XMMATRIX translation_matrix_;
 public:
 	Unit *player_unit_;
 	XMFLOAT4 vLightDirs[2];
@@ -87,6 +97,8 @@ public:
 	virtual void HandleInput(WPARAM w_param, LPARAM l_param, char input_device);
 	void UpdateCamera();
 	void RenderUnitList();
+
+	void setRotationMatrix();
 
 	void jump_motion(float time);
 	void move_motion();

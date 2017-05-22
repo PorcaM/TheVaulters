@@ -7,6 +7,11 @@
 
 #pragma once
 
+#include <d3d11_1.h>
+#include <directxmath.h>
+
+using namespace DirectX;
+
 /**
 	@class	Rigidbody
 	@date	2017/5/21
@@ -25,7 +30,8 @@ public:
 	float width_;	// x
 	float depth_;	// z
 	float height_;	// y
-	F f_;
+	XMFLOAT3 a_;
+	XMFLOAT3 v_ = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	Rigidbody() {};
 	void Init() {
