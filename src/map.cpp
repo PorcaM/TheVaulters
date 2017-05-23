@@ -1,6 +1,6 @@
 /**
-	@file	map.체ㅔ
-	@datea	2017/5/16
+	@file	map.cpp
+	@date	2017/5/16
 	@author	이성준
 	@brief
 */
@@ -25,11 +25,14 @@ void Map::Render(ConstantBuffer *contant_buffer) {
 		// Set local position
 		int x = it->index % width_;
 		int z = it->index / height_;
-		int size = 10;
-		float scale = 5.0f;
+		float scale = 50.0f;
+		float size = scale * 3.0f;
 
 		// Set constant buffer
-		XMMATRIX translationMatrix = XMMatrixTranslation(x*size, -1, z*size);
+		float trans_x = 0.0f;
+		if (z % 2 == 1) { trans_x = size / 2; }
+
+		XMMATRIX translationMatrix = XMMatrixTranslation(x * size + trans_x, -1, z * (size * 0.3f));
 		XMMATRIX scaleMatrix = XMMatrixScaling(scale, scale, scale);
 		contant_buffer->mWorld = XMMatrixTranspose(translationMatrix)*XMMatrixTranspose(scaleMatrix)*XMMatrixTranspose(g_World);
 		g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, contant_buffer, 0, 0);

@@ -26,7 +26,7 @@ void CameraControl::updateCamera(ConstantBuffer* cb) {
 
 	XMMATRIX defaultCamera = XMMatrixLookAtLH(camera_.Eye, camera_.At, camera_.Up);
 
-	XMMATRIX g_View =  rotation_m * translation_m * scaling_m * defaultCamera;
+	XMMATRIX g_View =  translation_m *rotation_m* scaling_m * defaultCamera;
 
 	cb->mView = XMMatrixTranspose(g_View);
 }

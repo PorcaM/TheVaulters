@@ -7,6 +7,7 @@
 #pragma once
 #include <directxmath.h>
 #include "unit.hpp"
+#include "rigidbody.hpp"
 
 class Unit;
 #define PI 3.14f
@@ -48,6 +49,7 @@ private:
 public:
 	UnitControl() {};
 	void Init() {};
+	void Vault();
 	void set_unit(Unit *unit) { unit_ = unit; }
 
 	void checkKeyState(WPARAM wparam, bool state);

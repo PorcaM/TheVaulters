@@ -60,29 +60,18 @@ void UnitControl::motion_move() {
 }
 
 void UnitControl::motion_jump(float t) {
-	// Initialize state
-	if (init_t == 0.0f) {
-		init_h = unit_->get_transform().position_.y;
-		curr_h = init_h;
-		curr_v = init_v;
-	}
+	Rigidbody rigidbody = unit_->get_ridigbody();
+	rigidbody.v_.y = 100.0f;
+	unit_->set_rigidbody(rigidbody);
+	vk_space = false;
+}
 
-	// jump
-	curr_t = t;
-	if (jump_delay < curr_t - init_t) {
-		curr_h = unit_->get_transform().position_.y;
-		curr_h += curr_v;
-		curr_v += gravity;
-		unit_->set_transform_position_y(curr_h);
+void UnitControl::Vault() {
+	const float power = 500.0f;
+	Rigidbody rigidbody = unit_->get_ridigbody();
+	Transform transform = unit_->get_transform();
+	float x = transform.rotation_.x;
+	float y = transform.rotation_.y;
+	float z = transform.rotation_.z;
 
-		init_t = curr_t;
-	}
-
-	// Initialize state : if jump end
-	if (curr_h < init_h) {
-		unit_->set_transform_position_y(init_h);
-		init_t = 0.0f;
-		curr_v = init_v;
-		vk_space = false;
-	}
 }
