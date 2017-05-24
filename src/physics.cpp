@@ -32,7 +32,7 @@ void Physics::Gravity(float delta_time) {
 		Unit *unit = *it;
 		Rigidbody rigidbody = unit->get_ridigbody();
 		if (unit->get_transform().position_.y > 0) {
-			rigidbody.v_.y -= graviational_acceleration_ * delta_time * factor;
+			rigidbody.v_.y -= graviational_acceleration_ *delta_time* factor;
 		}
 		else {
 			// rigidbody.v_.y = 0;
@@ -42,6 +42,7 @@ void Physics::Gravity(float delta_time) {
 }
 
 void Physics::Force(float delta_time) {
+	static const float air_resistance = 10.0f;
 	for (UnitList::iterator it = unit_list_->begin();
 		it != unit_list_->end(); it++) {
 		Unit *unit = *it;
@@ -53,11 +54,14 @@ void Physics::Force(float delta_time) {
 		transform.position_.x += delta_x;
 		transform.position_.y += delta_y;
 		transform.position_.z += delta_z;
+		rigidbody.v_.x -= air_resistance * delta_x;
+		rigidbody.v_.z -= air_resistance * delta_z;
 		if (transform.position_.y < 0) {
 			transform.position_.y = 0;
 			rigidbody.v_.y = 0;
 		}
 		unit->set_transform(transform);
+		unit->set_rigidbody(rigidbody);
 	}
 }
 

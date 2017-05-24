@@ -1,6 +1,6 @@
 /**
 	@file	game_play_scene.cpp
-	@datea	2017/5/16
+	@date	2017/5/16
 	@author	ÀÌ¼ºÁØ
 	@brief
 */
@@ -29,6 +29,7 @@ HRESULT GamePlayScene::Init(){
 	unit_list_[1]->set_transform_position_z(30.0f);
 
 	// Init player
+	player_.Init();
 	player_.set_unit(unit_list_[0]);
 	player_.set_unit_control(new UnitControl());
 	player_.get_unit_control()->set_unit(player_.get_unit());
@@ -97,9 +98,10 @@ void GamePlayScene::Render() {
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
 	// Unit control
-	UnitControl *player_ctrl = player_.get_unit_control();
+	/*UnitControl *player_ctrl = player_.get_unit_control();
 	if (player_ctrl->getJumpState()) { player_ctrl->motion_jump(t); }
-	player_ctrl->motion_move();
+	player_ctrl->motion_move();*/
+	player_.Update();
 
 	physics_.Gravity(delta_time);
 	physics_.Force(delta_time);
@@ -116,14 +118,7 @@ void GamePlayScene::Render() {
 }
 
 void GamePlayScene::HandleInput(WPARAM w_param, LPARAM l_param, char input_device) {
-	/*player_unit_->HandleInput(w_param, l_param, input_device);
-*/
-	// Keyboard key-down Input
-	if (input_device == 'd') { player_.get_unit_control()->checkKeyState(w_param, true); }
-
-	// Keyboard key-up Input
-	if (input_device == 'u') { player_.get_unit_control()->checkKeyState(w_param, false); }
-
+	player_.HandleInput(w_param, l_param, input_device);
 
 	// Keyboard key-down Input
 	if (input_device == 'd') { camera_control_->checkKeyState(w_param, true); }

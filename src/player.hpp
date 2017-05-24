@@ -17,11 +17,23 @@
 */
 class Player {
 private:
+	struct VirtualKeyboard {
+		bool w;
+		bool a;
+		bool s;
+		bool d;
+		bool space;
+	};
+
+	VirtualKeyboard vk_;
 	Unit *unit_;
 	UnitControl *unit_control_;
+
 public:
 	Player() {}
-	void Init() {};
+	void Init();
+	void Update();
+	void HandleInput(WPARAM w_param, LPARAM l_param, char input_device);
 
 	Unit *get_unit() const { return unit_; }
 	UnitControl *get_unit_control() const { return unit_control_; }
