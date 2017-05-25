@@ -17,6 +17,8 @@ void Map::Init(char *mapFile) {
 		temp.index = i;
 		terrian_list_.push_back(temp);
 	}
+	scale_ = 2.0f;
+	size_ = scale_ * 3.0f;
 }
 
 void Map::Render(ConstantBuffer *contant_buffer) {
@@ -25,15 +27,13 @@ void Map::Render(ConstantBuffer *contant_buffer) {
 		// Set local position
 		int x = it->index % width_;
 		int z = it->index / height_;
-		float scale = 50.0f;
-		float size = scale * 3.0f;
 
 		// Set constant buffer
 		float trans_x = 0.0f;
-		if (z % 2 == 1) { trans_x = size / 2; }
+		if (z % 2 == 1) { trans_x = size_ / 2; }
 
-		XMMATRIX translationMatrix = XMMatrixTranslation(x * size + trans_x, -1, z * (size * 0.3f));
-		XMMATRIX scaleMatrix = XMMatrixScaling(scale, scale, scale);
+		XMMATRIX translationMatrix = XMMatrixTranslation(x * size_ + trans_x, -1, z * (size_ * 0.3f));
+		XMMATRIX scaleMatrix = XMMatrixScaling(scale_, scale_, scale_);
 		contant_buffer->mWorld = XMMatrixTranspose(translationMatrix)*XMMatrixTranspose(scaleMatrix)*XMMatrixTranspose(g_World);
 		g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, contant_buffer, 0, 0);
 

@@ -108,7 +108,7 @@ HRESULT GamePlayScene::InitModels(){
 	const int kModelCnt = 2;
 	wstring model_path[kModelCnt] = {
 		L"model/Muddy.obj",
-		L"model/hexagon.obj",
+		L"model/vhexagon2.obj",
 	};
 	HRESULT hr = S_OK;
 
@@ -138,6 +138,9 @@ HRESULT GamePlayScene::InitUnits(){
 	unit_list_[1]->set_model(model_list_[0]);
 	unit_list_[1]->set_transform_position_x(0.0f);
 	unit_list_[1]->set_transform_position_z(100.0f);
+	transform = unit_list_[1]->get_transform();
+	transform.scale_.x = transform.scale_.y = transform.scale_.z = 10.0f;
+	unit_list_[1]->set_transform(transform);
 	return S_OK;
 }
 

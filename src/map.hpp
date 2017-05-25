@@ -40,6 +40,8 @@ private:
 	int width_;
 	int height_;
 	int depth_;
+	float scale_;
+	float size_;
 	vector<Terrian> terrian_list_;
 	Model *hexagon_;
 public:

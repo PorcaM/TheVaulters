@@ -17,11 +17,11 @@ HRESULT Model::InitFromObj(const wchar_t *obj_file) {
 	WaveFrontReader<int> wfr;
 	typedef WaveFrontReader<int>::Vertex Vertex;
 	hr = wfr.Load(obj_file);
-	/*if (FAILED(hr)) {
+	if (FAILED(hr)) {
 		wstring message = L"Fail to Load file " + wstring(obj_file);
 		MessageBox(nullptr, message.c_str(), L"Error", MB_OK);
 		return hr;
-	}*/
+	}
 
 	//vertex buffer
 	D3D11_BUFFER_DESC bd;
