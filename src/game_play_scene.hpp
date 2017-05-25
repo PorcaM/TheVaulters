@@ -44,6 +44,16 @@ private:
 		XMVECTORF32 background_color_;
 	};
 
+	HRESULT InitTheme();
+	HRESULT InitModels();
+	HRESULT InitUnits();
+	HRESULT InitPlayer();
+	HRESULT InitMap();
+	HRESULT InitLights();
+	HRESULT InitConstantBuffer();
+	HRESULT InitPhysics();
+	HRESULT InitCameraControl();
+
 	Theme theme_;
 	ConstantBuffer constant_buffer_;
 	ModelList model_list_;

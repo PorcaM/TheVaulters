@@ -85,5 +85,5 @@ void Physics::Reaction(Unit *u1, Unit *u2) {
 }
 
 bool Physics::IsTerrain(Unit *unit) {
-
+	return true;
 }
