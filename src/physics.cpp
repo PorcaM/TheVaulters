@@ -26,13 +26,13 @@ void Physics::ScanCollision() {
 }
 
 void Physics::Gravity(float delta_time) {
-	static const float factor = 50.0f;
+	static const float factor = 80.0f;
 	for (UnitList::iterator it = unit_list_->begin();
 		it != unit_list_->end(); it++) {
 		Unit *unit = *it;
 		Rigidbody rigidbody = unit->get_ridigbody();
 		if (unit->get_transform().position_.y > 0) {
-			rigidbody.v_.y -= graviational_acceleration_ *delta_time* factor;
+			rigidbody.v_.y -= graviational_acceleration_ * delta_time * factor;
 		}
 		else {
 			// rigidbody.v_.y = 0;
@@ -82,4 +82,8 @@ void Physics::Reaction(Unit *u1, Unit *u2) {
 	Transform transform = u1->get_transform();
 	transform.position_.y += 0.1f;
 	u1->set_transform(transform);
+}
+
+bool Physics::IsTerrain(Unit *unit) {
+
 }

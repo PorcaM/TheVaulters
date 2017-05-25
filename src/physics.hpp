@@ -24,6 +24,7 @@ private:
 	static const float graviational_acceleration_;
 
 	bool IsCollision(Unit *u1, Unit *u2);
+	bool IsTerrain(Unit *unit);
 	void Reaction(Unit *u1, Unit *u2);
 
 	UnitList *unit_list_;
@@ -35,5 +36,6 @@ public:
 	void Gravity(float delta_time);
 	void Force(float delta_time);
 
+	void set_map(Map *map) { map_ = map; }
 	void set_unit_list(UnitList *unit_list) { unit_list_ = unit_list; }
 };

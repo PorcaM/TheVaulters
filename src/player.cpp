@@ -16,16 +16,16 @@ void Player::Update() {
 	if (vk_.a) unit_control_->Move(UnitControl::Direction::kLeft);
 	if (vk_.s) unit_control_->Move(UnitControl::Direction::kBehind);
 	if (vk_.d) unit_control_->Move(UnitControl::Direction::kRight);
-	if (vk_.space) unit_control_->Jump();
+	if (vk_.space) { unit_control_->Jump(); vk_.space = false; }
 }
 
-void Player::HandleInput(WPARAM w_param, LPARAM l_param, char input_device) {
+void Player::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 	bool state;
-	if (input_device == 'd')		state = true;
-	else if (input_device == 'u')	state = false;
+	if (message == WM_KEYDOWN)		state = true;
+	else if (message == WM_KEYUP)	state = false;
 
-	if (w_param <= 0x5A && w_param >= 0x41) {
-		char key = w_param - 0x41 + 'A';
+	if (wParam <= 0x5A && wParam >= 0x41) {
+		char key = wParam - 0x41 + 'A';
 		switch (key) {
 		case 'W': vk_.w = state;	break;
 		case 'A': vk_.a = state;	break;
@@ -33,7 +33,7 @@ void Player::HandleInput(WPARAM w_param, LPARAM l_param, char input_device) {
 		case 'D': vk_.d = state;	break;
 		}
 	}
-	if (w_param == VK_SPACE) {
+	if (wParam == VK_SPACE) {
 		vk_.space = state;
 	}
 }

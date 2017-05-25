@@ -60,6 +60,6 @@ public:
 	GamePlayScene(){};
 	virtual HRESULT Init();
 	virtual void Render();
-	virtual void HandleInput(WPARAM w_param, LPARAM l_param, char input_device);
+	virtual void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
 	void RenderUnitList();
 };

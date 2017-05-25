@@ -519,16 +519,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_MOUSEWHEEL:
-		scene->HandleInput(wParam, lParam, 'h');
-		break;
 	case WM_MOUSEMOVE:
-		scene->HandleInput(wParam, lParam, 'm');
-		break;
 	case WM_KEYDOWN:
-		scene->HandleInput(wParam, lParam, 'd');
-		break;
 	case WM_KEYUP:
-		scene->HandleInput(wParam, lParam, 'u');
+	case WM_MBUTTONDOWN:
+		scene->HandleInput(message, wParam, lParam);
 		break;
 
 	case WM_PAINT:

@@ -33,7 +33,7 @@ public:
 	Player() {}
 	void Init();
 	void Update();
-	void HandleInput(WPARAM w_param, LPARAM l_param, char input_device);
+	void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
 
 	Unit *get_unit() const { return unit_; }
 	UnitControl *get_unit_control() const { return unit_control_; }

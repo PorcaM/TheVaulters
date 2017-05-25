@@ -28,7 +28,7 @@ void UnitControl::Move(Direction direction) {
 
 void UnitControl::Jump() {
 	Rigidbody rigidbody = unit_->get_ridigbody();
-	rigidbody.v_.y = 100.0f;
+	rigidbody.v_.y = 300.0f;
 	unit_->set_rigidbody(rigidbody);
 }
 
