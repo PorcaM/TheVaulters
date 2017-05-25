@@ -11,31 +11,22 @@ HRESULT GamePlayScene::Init(){
 	HRESULT hr = S_OK;
 
 	hr = InitTheme();
-	if (FAILED(hr)) return hr;
 
 	hr = InitModels();
-	if (FAILED(hr)) return hr;
 
 	hr = InitUnits();
-	if (FAILED(hr)) return hr;
 
 	hr = InitPlayer();
-	if (FAILED(hr)) return hr;
 
 	hr = InitMap();
-	if (FAILED(hr)) return hr;
 
 	hr = InitLights();
-	if (FAILED(hr)) return hr;
 
 	hr = InitConstantBuffer();
-	if (FAILED(hr)) return hr;
 
 	hr = InitPhysics();
-	if (FAILED(hr)) return hr;
 
 	hr = InitCameraControl();
-	if (FAILED(hr)) return hr;
 
 	return S_OK;
 }
@@ -114,10 +105,23 @@ HRESULT GamePlayScene::InitTheme() {
 }
 
 HRESULT GamePlayScene::InitModels(){
-	model_list_.push_back(new Model());
-	model_list_[0]->InitFromObj(L"model/low_poly_sphere.obj");
-	model_list_.push_back(new Model());
-	model_list_[1]->InitFromObj(L"model/hexagon.obj");
+	const int kModelCnt = 2;
+	wstring model_path[kModelCnt] = {
+		L"model/Muddy.obj",
+		L"model/hexagon.obj",
+	};
+	HRESULT hr = S_OK;
+
+	for (int i = 0; i < kModelCnt; i++) {
+		model_list_.push_back(new Model());
+		hr = model_list_[i]->InitFromObj(model_path[i].c_str());
+		if (FAILED(hr)) {
+			wstring message = L"Fail to initialize model " + to_wstring(i) + L"\"" + model_path[i] + L"\"";
+			MessageBox(nullptr, message.c_str(), L"Error", MB_OK);
+			return hr;
+		}
+	}
+
 	return S_OK;
 }
 
@@ -126,6 +130,9 @@ HRESULT GamePlayScene::InitUnits(){
 	unit_list_[0]->Init();
 	unit_list_[0]->set_model(model_list_[0]);
 	unit_list_[0]->set_transform_position_y(30.0f);
+	Transform transform = unit_list_[0]->get_transform();
+	transform.scale_.x = transform.scale_.y = transform.scale_.z = 10.0f;
+	unit_list_[0]->set_transform(transform);
 	unit_list_.push_back(new Unit());
 	unit_list_[1]->Init();
 	unit_list_[1]->set_model(model_list_[0]);

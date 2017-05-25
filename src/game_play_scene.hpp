@@ -8,6 +8,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <d3d11_1.h>
 #include <directxcolors.h>
 #include "scene.hpp"
