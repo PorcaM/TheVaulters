@@ -71,6 +71,7 @@ public:
 	GamePlayScene(){};
 	virtual HRESULT Init();
 	virtual void Render();
+	virtual void Update();
 	virtual void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
 	void RenderUnitList();
 };

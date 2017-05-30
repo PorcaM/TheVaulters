@@ -13,9 +13,10 @@ Model::~Model() {
 }
 
 HRESULT Model::InitFromObj(const wchar_t *obj_file) {
+	typedef int Index;
 	HRESULT hr = S_OK;
-	WaveFrontReader<int> wfr;
-	typedef WaveFrontReader<int>::Vertex Vertex;
+	WaveFrontReader<Index> wfr;
+	typedef WaveFrontReader<Index>::Vertex Vertex;
 	hr = wfr.Load(obj_file);
 	if (FAILED(hr)) {
 		wstring message = L"Fail to Load file " + wstring(obj_file);
@@ -39,6 +40,7 @@ HRESULT Model::InitFromObj(const wchar_t *obj_file) {
 	InitData.pSysMem = &wfr.vertices[0];
 	InitData.SysMemPitch = 0;
 	InitData.SysMemSlicePitch = 0;
+
 	hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &vertex_buffer_);
 	if (FAILED(hr))
 		return hr;
@@ -52,7 +54,7 @@ HRESULT Model::InitFromObj(const wchar_t *obj_file) {
 	// Create vertex buffer
 
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(int) * wfr.indices.size();        // 36 vertices needed for 12 triangles in a triangle list
+	bd.ByteWidth = sizeof(Index) * wfr.indices.size();        // 36 vertices needed for 12 triangles in a triangle list
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	bd.MiscFlags = 0;
@@ -93,5 +95,5 @@ void Model::Render() {
 	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
 	g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
 	g_pImmediateContext->PSSetConstantBuffers(0, 1, &g_pConstantBuffer);
-	g_pImmediateContext->DrawIndexed(index_count_, 0, 0);
+	g_pImmediateContext->DrawIndexed(index_count_*2, 0, 0);
 }

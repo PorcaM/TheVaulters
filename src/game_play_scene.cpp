@@ -38,7 +38,7 @@ void GamePlayScene::RenderUnitList() {
 	}
 }
 
-void GamePlayScene::Render() {
+void GamePlayScene::Update() {
 	// Update our time
 	static float t = 0.0f;
 	if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
@@ -60,25 +60,22 @@ void GamePlayScene::Render() {
 	time_prev = time_curr;
 	time_curr = t;
 
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color_);
-	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	
-	// Unit control
-	/*UnitControl *player_ctrl = player_.get_unit_control();
-	if (player_ctrl->getJumpState()) { player_ctrl->motion_jump(t); }
-	player_ctrl->motion_move();*/
 	player_.Update();
 
 	physics_.Gravity(delta_time);
 	physics_.Force(delta_time);
 	physics_.ScanCollision();
-	
+
 	// Camera control
-	camera_control_->camera_move();
 	camera_control_->updateCamera(&constant_buffer_);
+}
+
+void GamePlayScene::Render() {
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color_);
+	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
 	RenderUnitList();
-	map_->Render(&constant_buffer_);
+	// map_->Render(&constant_buffer_);
 
 	g_pSwapChain->Present(0, 0);
 }
@@ -93,8 +90,6 @@ void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 	case WM_KEYDOWN:	input_device = 'd';	break;
 	case WM_KEYUP:		input_device = 'u';	break;
 	}
-	if (input_device == 'd') { camera_control_->checkKeyState(wParam, true); }
-	if (input_device == 'u') { camera_control_->checkKeyState(wParam, false); }
 	if (input_device == 'h') { camera_control_->mouseWheelAction(wParam); }
 	if (input_device == 'm') { camera_control_->mouseMoveAction(lParam); }
 }

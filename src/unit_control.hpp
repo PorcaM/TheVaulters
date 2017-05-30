@@ -16,19 +16,20 @@
 	@brief
 */
 class UnitControl {
-private:
-	Unit* unit_;
-
 public:
 	enum Direction {
 		kForward, kBehind, kLeft, kRight,
 	};
 
 	UnitControl() {};
-	void Init() {};
+	void Init();
 	void Move(Direction direction);
 	void Jump();
-	void Vault();
+	void Vault(float charge);
 
 	void set_unit(Unit *unit) { unit_ = unit; }
+
+private:
+	Unit* unit_;
+
 };

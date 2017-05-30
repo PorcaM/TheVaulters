@@ -25,11 +25,18 @@ private:
 	Transform transform_;
 	Rigidbody rigidbody_;
 	Model *model_;
+	float yaw_ = 0.0f;
+	float speed_ = 0.0f;
+	float angle_ = 0.0f;
 public:
 
 	Unit() {};
 	void Init() { rigidbody_.Init(); }
 	void Render(ConstantBuffer *constant_buffer);
+
+	void setYawControl(float yaw) { yaw_ = yaw; }
+	float getYawControl() { return yaw_; }
+	void setSpeedControl(float speed) { speed_ = speed; }
 
 	Transform get_transform() const { return transform_; }
 	Rigidbody get_ridigbody() const { return rigidbody_; }

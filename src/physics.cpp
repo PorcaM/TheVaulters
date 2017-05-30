@@ -26,7 +26,7 @@ void Physics::ScanCollision() {
 }
 
 void Physics::Gravity(float delta_time) {
-	static const float factor = 80.0f;
+	static const float factor = 30.0f;
 	for (UnitList::iterator it = unit_list_->begin();
 		it != unit_list_->end(); it++) {
 		Unit *unit = *it;
@@ -78,10 +78,20 @@ bool Physics::IsCollision(Unit *u1, Unit *u2) {
 	return true;
 }
 
-void Physics::Reaction(Unit *u1, Unit *u2) {
-	Transform transform = u1->get_transform();
-	transform.position_.y += 0.1f;
-	u1->set_transform(transform);
+void Physics::Reaction(Unit *unit1, Unit *unit2) {
+	Rigidbody rigidbody1 = unit1->get_ridigbody();
+	Rigidbody rigidbody2 = unit2->get_ridigbody();
+	XMFLOAT3 v1 = rigidbody1.v_;
+	XMFLOAT3 v2 = rigidbody2.v_;
+	rigidbody1.v_.x = v2.x;
+	rigidbody1.v_.y = v2.y;
+	rigidbody1.v_.z = v2.z;
+	rigidbody2.v_.x = v1.x;
+	rigidbody2.v_.y = v1.y;
+	rigidbody2.v_.z = v1.z;
+	rigidbody1.v_.y += 10.0f;
+	unit1->set_rigidbody(rigidbody1);
+	unit2->set_rigidbody(rigidbody2);
 }
 
 bool Physics::IsTerrain(Unit *unit) {

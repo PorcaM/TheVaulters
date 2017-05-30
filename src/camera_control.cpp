@@ -17,51 +17,29 @@ void CameraControl::updateCamera(ConstantBuffer* cb) {
 	float y = player_unit_->get_transform().position_.y;
 	float z = player_unit_->get_transform().position_.z;
 
-	XMVECTOR newEye = XMVectorSet(x, y, z, 0.0f);
-	//camera_.Eye = newEye;
+	XMVECTOR newEye = XMVectorSet(x, y + 40.0f, z + scale, 0.0f);
+	camera_.Eye = newEye;
 
-	XMMATRIX translation_m = XMMatrixTranslation(trn_x_, trn_y_, trn_z_);
-	XMMATRIX rotation_m = XMMatrixRotationRollPitchYaw(rot_x_, rot_y_,rot_z_);
+	XMVECTOR newAt = XMVectorSet(x, y + 40.0f, z + 50.0f, 0.0f);
+	camera_.At = newAt;
+
+	XMMATRIX y_rotation_m = XMMatrixRotationRollPitchYaw(0.0f, XMConvertToDegrees(-yaw) / 10.0f, 0.0f);
+	XMMATRIX rotation_m = XMMatrixRotationX(XMConvertToDegrees(-rot_x_)/10.0f);
 	XMMATRIX scaling_m = XMMatrixScaling(scale, scale, scale);
-
 	XMMATRIX defaultCamera = XMMatrixLookAtLH(camera_.Eye, camera_.At, camera_.Up);
 
-	XMMATRIX g_View =  translation_m *rotation_m* scaling_m * defaultCamera;
+	XMMATRIX g_View =
+		defaultCamera * 
+		XMMatrixTranspose(y_rotation_m) * 
+		XMMatrixTranspose(rotation_m);
+
+	player_unit_->setYawControl(yaw);
+	player_unit_->setSpeedControl(move_speed_);
 
 	cb->mView = XMMatrixTranspose(g_View);
 }
 
-void CameraControl::checkKeyState(WPARAM wparam, bool state) {
-	if (wparam <= 0x5A && wparam >= 0x41) {
-		char key = wparam - 0x41 + 'A';
-
-		switch (key) {
-		case 'W':
-			vk_w = state;
-			break;
-		case 'A':
-			vk_a = state;
-			break;
-		case 'S':
-			vk_s = state;
-			break;
-		case 'D':
-			vk_d = state;
-			break;
-		}
-	}
-}
-
-void CameraControl::camera_move() {
-	if (vk_w) { trn_z_ -= move_speed_; }
-	if (vk_a) { trn_x_ += move_speed_; }
-	if (vk_s) { trn_z_ += move_speed_; }
-	if (vk_d) { trn_x_ -= move_speed_; }
-}
-
 void CameraControl::mouseWheelAction(WPARAM wparam) {
-	//float camera_eye_z = XMVectorGetZ(camera_.Eye);
-
 	// Wheel up
 	if ((short)HIWORD(wparam) > 0) {
 		if (zooming_max > scale) { scale += sens_wheel; }
@@ -86,8 +64,8 @@ void CameraControl::mouseMoveAction(LPARAM lparam) {
 		curr_x = LOWORD(lparam);
 		curr_y = HIWORD(lparam);
 # define PI 3.14
-		rot_y_ -= (curr_x - prev_x) / sens_rot * PI / 180;
 		rot_x_ -= (curr_y - prev_y) / sens_rot * PI / 180;
+		yaw -= (curr_x - prev_x) / sens_rot * PI / 180;
 
 		prev_x = curr_x;
 		prev_y = curr_y;

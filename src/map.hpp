@@ -26,6 +26,9 @@ class Terrian{
 public:
 	int id;
 	int index;
+	int objCode = 0;
+	XMFLOAT2 Pos;
+	float size = 0.0f;
 };
 
 /**
@@ -48,6 +51,8 @@ public:
 
 	void Init(char *mapFile);
 	void Render(ConstantBuffer *contant_buffer);
+
+	vector<Terrian>* getTerrainList() { return &terrian_list_; }
 
 	void set_hexagon(Model *hexagon) { hexagon_ = hexagon; }
 };

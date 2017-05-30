@@ -35,13 +35,21 @@ void Unit::Render(ConstantBuffer *constant_buffer) {
 	x = rotation.x;
 	y = rotation.y;
 	z = rotation.z;
-	XMMATRIX rotationMatrix = XMMatrixRotationX(z)*XMMatrixRotationX(y)*XMMatrixRotationX(x);
+	XMMATRIX rotationMatrix = XMMatrixRotationZ(z)*XMMatrixRotationY(y)*XMMatrixRotationX(x);
 	x = scale.x;
 	y = scale.y;
 	z = scale.z;
 	XMMATRIX scalingMatrix = XMMatrixScaling(x, y, z);
-	constant_buffer->mWorld = XMMatrixTranspose(translationMatrix) * XMMatrixTranspose(rotationMatrix) *
-		XMMatrixTranspose(scalingMatrix) * XMMatrixTranspose(g_World);
+
+	XMMATRIX yawMatrix = XMMatrixRotationRollPitchYaw(0.0f, XMConvertToDegrees(-yaw_)/10.0f, 0.0f);
+
+	constant_buffer->mWorld = 
+		XMMatrixTranspose(translationMatrix) *
+		XMMatrixTranspose(rotationMatrix) *
+		XMMatrixTranspose(scalingMatrix) * 
+		XMMatrixTranspose(yawMatrix) *
+		XMMatrixTranspose(g_World);
+
 	g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, constant_buffer, 0, 0);
 
 	model_->Render();

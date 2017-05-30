@@ -16,12 +16,7 @@ void UnitControl::Move(Direction direction) {
 	if (direction == kBehind)	rigidbody.v_.z = -speed;
 	if (direction == kLeft)		rigidbody.v_.x = -speed;
 	if (direction == kRight)	rigidbody.v_.x = speed;
-
-	/*if (direction == kForward)	transform.position_.z += speed;
-	if (direction == kBehind)	transform.position_.z += -speed;
-	if (direction == kLeft)		transform.position_.x += -speed;
-	if (direction == kRight)	transform.position_.x += speed;*/
-
+	
 	unit_->set_rigidbody(rigidbody);
 	unit_->set_transform(transform);
 }
@@ -32,12 +27,13 @@ void UnitControl::Jump() {
 	unit_->set_rigidbody(rigidbody);
 }
 
-void UnitControl::Vault() {
+void UnitControl::Vault(float charge) {
 	float power = 500.0f;
 	Rigidbody rigidbody = unit_->get_ridigbody();
 	Transform transform = unit_->get_transform();
 	float x = transform.rotation_.x;
 	float y = transform.rotation_.y;
 	float z = transform.rotation_.z;
-
+	rigidbody.v_.z = power * charge;
+	unit_->set_rigidbody(rigidbody);
 }

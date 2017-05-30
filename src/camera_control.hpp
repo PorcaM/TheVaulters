@@ -21,25 +21,24 @@ private:
 	Unit* player_unit_;
 
 	float move_speed_ = 0.1f;
+	float angle_ = 0.0f;
 
-	// Translation
 	float trn_x_ = 0.0f;
 	float trn_y_ = 0.0f;
 	float trn_z_ = 0.0f;
 
 	// Rotation
 	float rot_x_ = 0.0f;
-	float rot_y_ = 0.0f;
-	float rot_z_ = 0.0f;
+	float yaw = 0.0f;
 
 	// Scaling
-	float scale = 1.0f;
+	float scale = 0.0f;
 
 	// Mouse action
-	float zooming_max = 2.0f;
-	float zooming_min = 0.8f;
+	float zooming_max = 0.0f;
+	float zooming_min = -30.0f;
 
-	float sens_wheel = 0.2f;
+	float sens_wheel = 2.0f;
 	float sens_rot = 10.0f;
 
 	float prev_x = 0.0f;
@@ -49,12 +48,6 @@ private:
 	float curr_y = 0.0f;
 
 	bool position_initialize = true;
-
-	// Keyboard
-	bool vk_w = false;
-	bool vk_a = false;
-	bool vk_s = false;
-	bool vk_d = false;
 	
 	Camera camera_;
 	
@@ -62,9 +55,6 @@ public:
 	CameraControl(Unit* player_unit);
 
 	void updateCamera(ConstantBuffer* cb);
-
-	void checkKeyState(WPARAM wparam, bool state);
-	void camera_move();
 
 	void mouseWheelAction(WPARAM wparam);
 	void mouseMoveAction(LPARAM lparam);
