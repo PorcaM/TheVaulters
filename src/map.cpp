@@ -46,8 +46,6 @@ void Map::Render(ConstantBuffer *contant_buffer) {
 		it->Pos.y = z * ( size_ * 0.3f );
 		it->size = scale_;
 
-		contant_buffer->vLightDir[cnt] = XMFLOAT4(x * size_ + trans_x, 10.0f, z * (size_ * 0.3f), 1.0f);
-		contant_buffer->vLightColor[cnt] = XMFLOAT4(light_intencity, light_intencity, light_intencity, 1.0f);
 		contant_buffer->mWorld = XMMatrixTranspose(translationMatrix)*XMMatrixTranspose(scaleMatrix)*XMMatrixTranspose(g_World);
 		g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, contant_buffer, 0, 0);
 

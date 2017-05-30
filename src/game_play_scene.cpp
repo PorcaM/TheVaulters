@@ -75,7 +75,7 @@ void GamePlayScene::Render() {
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
 	RenderUnitList();
-	// map_->Render(&constant_buffer_);
+	map_->Render(&constant_buffer_);
 
 	g_pSwapChain->Present(0, 0);
 }
@@ -135,6 +135,7 @@ HRESULT GamePlayScene::InitUnits(){
 	unit_list_[1]->set_transform_position_z(100.0f);
 	transform = unit_list_[1]->get_transform();
 	transform.scale_.x = transform.scale_.y = transform.scale_.z = 10.0f;
+	transform.rotation_.y = XMConvertToRadians(180.0f);
 	unit_list_[1]->set_transform(transform);
 	return S_OK;
 }
