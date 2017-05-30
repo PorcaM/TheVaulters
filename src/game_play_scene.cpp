@@ -37,6 +37,9 @@ HRESULT GamePlayScene::Init(){
 
 	hr = InitCameraControl();
 
+	state_ = State::kPlay;
+	curr_time_ = 0.0f;
+
 	return S_OK;
 }
 
@@ -62,6 +65,7 @@ void GamePlayScene::Update() {
 			timeStart = timeCur;
 		t = (timeCur - timeStart) / 1000.0f;
 	}
+	curr_time_ = t;
 
 	static float time_prev = 0.0f;
 	static float time_curr = 0.0f;

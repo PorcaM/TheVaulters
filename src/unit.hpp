@@ -21,16 +21,13 @@ extern D3D_DRIVER_TYPE         g_driverType;
 	@brief
 */
 class Unit{
-private:
-	Transform transform_;
-	Rigidbody rigidbody_;
-	Model *model_;
-	float yaw_ = 0.0f;
-	float speed_ = 0.0f;
-	float angle_ = 0.0f;
 public:
+	enum State 
+	{
+		kIdle, kDead, kWalk, kVault
+	};
 
-	Unit() {};
+	Unit() { state_ = State::kIdle; }
 	void Init() { rigidbody_.Init(); }
 	void Render(ConstantBuffer *constant_buffer);
 
@@ -47,4 +44,13 @@ public:
 	void set_transform_position_y(float position_y) { transform_.position_.y = position_y; }
 	void set_transform_position_z(float position_z) { transform_.position_.z = position_z; }
 	void set_model(Model *model) { model_ = model; }
+
+private:
+	State 					state_;
+	Transform 				transform_;
+	Rigidbody 				rigidbody_;
+	Model*					model_;
+	float 					yaw_ = 0.0f;
+	float 					speed_ = 0.0f;
+	float 					angle_ = 0.0f;
 };

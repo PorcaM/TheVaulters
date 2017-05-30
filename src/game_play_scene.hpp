@@ -51,14 +51,18 @@ public:
 		int					player_cnt;
 	};
 
-	GamePlayScene() {};
+	enum State {
+		kLoad, kPlay, kEnd,
+	};
+
+	GamePlayScene() { state_ = State::kLoad; }
 	~GamePlayScene();
-	virtual HRESULT			Init();
-	virtual void			Render();
-	virtual void			Update();
-	virtual void			HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
-	void					RenderUnitList();
-	HRESULT					PushUnit(Model *model);
+	virtual HRESULT Init();
+	virtual void Render();
+	virtual void Update();
+	virtual void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
+	void RenderUnitList();
+	HRESULT PushUnit(Model *model);
 
 	CameraControl*			camera_control_;
 	UnitControl*			unit_control_;
@@ -66,22 +70,24 @@ public:
 	XMFLOAT4				vLightColors[2];
 
 private:
-	HRESULT 				InitTheme();
-	HRESULT 				InitModels();
-	HRESULT 				InitUnits();
-	HRESULT 				InitPlayer();
-	HRESULT 				InitMap();
-	HRESULT 				InitLights();
-	HRESULT 				InitConstantBuffer();
-	HRESULT 				InitPhysics();
-	HRESULT 				InitCameraControl();
+	HRESULT InitTheme();
+	HRESULT InitModels();
+	HRESULT InitUnits();
+	HRESULT InitPlayer();
+	HRESULT InitMap();
+	HRESULT InitLights();
+	HRESULT InitConstantBuffer();
+	HRESULT InitPhysics();
+	HRESULT InitCameraControl();
 
 	Theme 					theme_;
+	State					state_;
 	ConstantBuffer 			constant_buffer_;
 	ModelList 				model_list_;
 	UnitList 				unit_list_;
 	Map*					map_;
 	Physics 				physics_;
 	Player 					player_;
+	float					curr_time_;
 
 };
