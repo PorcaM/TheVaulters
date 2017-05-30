@@ -44,7 +44,7 @@ void UnitControl::Jump() {
 }
 
 void UnitControl::Vault(float charge) {
-	float power = 2000.0f;
+	float power = 1000.0f;
 	Rigidbody rigidbody = unit_->get_ridigbody();
 	Transform transform = unit_->get_transform();
 	float yaw = unit_->getYawControl();
