@@ -8,6 +8,14 @@
 #include "physics.hpp"
 
 const float Physics::graviational_acceleration_ = 9.8f;
+const float Physics::minimun_velocity_ = 0.01f;
+
+void Physics::Update(float delta_time)
+{
+	Gravity(delta_time);
+	Force(delta_time);
+	ScanCollision();
+}
 
 void Physics::ScanCollision() {
 	for (UnitList::iterator it = unit_list_->begin();
@@ -54,14 +62,28 @@ void Physics::Force(float delta_time) {
 		transform.position_.x += delta_x;
 		transform.position_.y += delta_y;
 		transform.position_.z += delta_z;
-		rigidbody.v_.x -= air_resistance * delta_x;
-		rigidbody.v_.z -= air_resistance * delta_z;
-		if (transform.position_.y < 0) {
+
+		if (IsTerrain(unit) && transform.position_.y <= 0) {
+			rigidbody.v_.x -= air_resistance * delta_x;
+			rigidbody.v_.z -= air_resistance * delta_z;
+		}
+		if (rigidbody.v_.x <= minimun_velocity_) rigidbody.v_.x = 0;
+		if (rigidbody.v_.z <= minimun_velocity_) rigidbody.v_.z = 0;
+
+		if (IsTerrain(unit) && transform.position_.y < 0) {
 			transform.position_.y = 0;
 			rigidbody.v_.y = 0;
 		}
+
 		unit->set_transform(transform);
 		unit->set_rigidbody(rigidbody);
+
+		if (rigidbody.v_.x == 0.0f &&
+			rigidbody.v_.y == 0.0f &&
+			rigidbody.v_.z == 0.0f)
+		{
+			unit->set_state(Unit::State::kIdle);
+		}
 	}
 }
 
@@ -95,5 +117,6 @@ void Physics::Reaction(Unit *unit1, Unit *unit2) {
 }
 
 bool Physics::IsTerrain(Unit *unit) {
-	return true;
+	Transform transform = unit->get_transform();
+	return map_->IsTerrain(transform.position_.x, transform.position_.z);
 }

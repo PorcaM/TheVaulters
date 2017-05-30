@@ -52,7 +52,7 @@ public:
 	};
 
 	enum State {
-		kLoad, kPlay, kEnd,
+		kLoad, kPlay, kEnd, kPause
 	};
 
 	GamePlayScene() { state_ = State::kLoad; }
@@ -79,6 +79,7 @@ private:
 	HRESULT InitConstantBuffer();
 	HRESULT InitPhysics();
 	HRESULT InitCameraControl();
+	bool IsEnd();
 
 	Theme 					theme_;
 	State					state_;

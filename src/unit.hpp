@@ -24,17 +24,18 @@ class Unit{
 public:
 	enum State 
 	{
-		kIdle, kDead, kWalk, kVault
+		kIdle, kDead, kWalk, kJump, kVault, kReaction
 	};
 
 	Unit() { state_ = State::kIdle; }
 	void Init() { rigidbody_.Init(); }
 	void Render(ConstantBuffer *constant_buffer);
 
+	void set_state(State state) { state_ = state; }
+	State get_state() { return state_; }
 	void setYawControl(float yaw) { yaw_ = yaw; }
 	float getYawControl() { return yaw_; }
 	void setSpeedControl(float speed) { speed_ = speed; }
-
 	Transform get_transform() const { return transform_; }
 	Rigidbody get_ridigbody() const { return rigidbody_; }
 	void set_transform(Transform transform) { transform_ = transform; }

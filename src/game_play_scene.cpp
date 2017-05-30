@@ -51,36 +51,41 @@ void GamePlayScene::RenderUnitList() {
 }
 
 void GamePlayScene::Update() {
-	// Update our time
-	static float t = 0.0f;
-	if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+	if (IsEnd())
 	{
-		t += (float)XM_PI * 0.0125f;
+		state_ = State::kEnd;
 	}
-	else
+	if (state_ == State::kPlay)
 	{
-		static ULONGLONG timeStart = 0;
-		ULONGLONG timeCur = GetTickCount64();
-		if (timeStart == 0)
-			timeStart = timeCur;
-		t = (timeCur - timeStart) / 1000.0f;
+		// Update our time
+		static float t = 0.0f;
+		if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+		{
+			t += (float)XM_PI * 0.0125f;
+		}
+		else
+		{
+			static ULONGLONG timeStart = 0;
+			ULONGLONG timeCur = GetTickCount64();
+			if (timeStart == 0)
+				timeStart = timeCur;
+			t = (timeCur - timeStart) / 1000.0f;
+		}
+		curr_time_ = t;
+
+		static float time_prev = 0.0f;
+		static float time_curr = 0.0f;
+		float delta_time = time_curr - time_prev;
+		time_prev = time_curr;
+		time_curr = t;
+
+		player_.Update();
+
+		physics_.Update(delta_time);
+
+		// Camera control
+		camera_control_->updateCamera(&constant_buffer_);
 	}
-	curr_time_ = t;
-
-	static float time_prev = 0.0f;
-	static float time_curr = 0.0f;
-	float delta_time = time_curr - time_prev;
-	time_prev = time_curr;
-	time_curr = t;
-
-	player_.Update();
-
-	physics_.Gravity(delta_time);
-	physics_.Force(delta_time);
-	physics_.ScanCollision();
-
-	// Camera control
-	camera_control_->updateCamera(&constant_buffer_);
 }
 
 void GamePlayScene::Render() {
@@ -214,4 +219,20 @@ HRESULT GamePlayScene::InitPhysics(){
 HRESULT GamePlayScene::InitCameraControl(){
 	camera_control_ = new CameraControl(player_.get_unit());
 	return S_OK;
+}
+
+bool GamePlayScene::IsEnd() 
+{
+	int non_dead_cnt = 0;
+	for (UnitList::iterator it = unit_list_.begin();
+		it != unit_list_.end(); it++)
+	{
+		Unit *unit = *it;
+		if (unit->get_state() != Unit::State::kDead) 
+		{
+			non_dead_cnt++;
+		}
+	}
+	if (non_dead_cnt > 1)	return false;
+	else					return true;
 }

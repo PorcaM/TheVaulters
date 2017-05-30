@@ -8,6 +8,11 @@
 #include "unit_control.hpp"
 
 void UnitControl::Move(Direction direction) {
+	Unit::State state = unit_->get_state();
+	if (state != Unit::State::kIdle && 
+		state != Unit::State::kWalk)
+		return;
+
 	Transform transform = unit_->get_transform();
 	Rigidbody rigidbody = unit_->get_ridigbody();
 	float speed = 100.0f;
@@ -35,20 +40,28 @@ void UnitControl::Move(Direction direction) {
 	
 	unit_->set_rigidbody(rigidbody);
 	unit_->set_transform(transform);
+	unit_->set_state(Unit::State::kWalk);
 }
 
 void UnitControl::Jump() {
+	Unit::State state = unit_->get_state();
+	if (state != Unit::State::kIdle &&
+		state != Unit::State::kWalk) 
+		return;
+
 	Rigidbody rigidbody = unit_->get_ridigbody();
 	rigidbody.v_.y = 300.0f;
 	unit_->set_rigidbody(rigidbody);
+	unit_->set_state(Unit::State::kJump);
 }
 
 void UnitControl::Vault(float charge) {
-	float power = 1000.0f;
+	float power = 3000.0f;
 	Rigidbody rigidbody = unit_->get_ridigbody();
 	Transform transform = unit_->get_transform();
 	float yaw = unit_->getYawControl();
 	rigidbody.v_.z = power * cos(XMConvertToDegrees(-yaw) / 10.0f);
 	rigidbody.v_.x = power * sin(XMConvertToDegrees(-yaw) / 10.0f);
 	unit_->set_rigidbody(rigidbody);
+	unit_->set_state(Unit::State::kVault);
 }
