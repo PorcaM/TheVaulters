@@ -7,6 +7,15 @@
 
 #include "game_play_scene.hpp"
 
+GamePlayScene::~GamePlayScene() 
+{
+	for (UnitList::iterator it = unit_list_.begin();
+		it != unit_list_.end(); it++) 
+	{
+		delete (*it);
+	}
+}
+
 HRESULT GamePlayScene::Init(){
 	HRESULT hr = S_OK;
 
@@ -71,7 +80,7 @@ void GamePlayScene::Update() {
 }
 
 void GamePlayScene::Render() {
-	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color_);
+	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color);
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
 	RenderUnitList();
@@ -95,7 +104,7 @@ void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 }
 
 HRESULT GamePlayScene::InitTheme() {
-	theme_.background_color_ = Colors::CornflowerBlue;
+	theme_.background_color = Colors::CornflowerBlue;
 	return S_OK;
 }
 
@@ -121,22 +130,38 @@ HRESULT GamePlayScene::InitModels(){
 }
 
 HRESULT GamePlayScene::InitUnits(){
-	unit_list_.push_back(new Unit());
-	unit_list_[0]->Init();
-	unit_list_[0]->set_model(model_list_[0]);
+	HRESULT hr = S_OK;
+	Model *unit_model = model_list_[0];
+	for (int i = 0; i < 2; i++)
+	{
+		hr = PushUnit(unit_model);
+		if (hr == E_FAIL) return hr;
+	}
+
 	unit_list_[0]->set_transform_position_y(30.0f);
 	Transform transform = unit_list_[0]->get_transform();
 	transform.scale_.x = transform.scale_.y = transform.scale_.z = 10.0f;
 	unit_list_[0]->set_transform(transform);
-	unit_list_.push_back(new Unit());
-	unit_list_[1]->Init();
-	unit_list_[1]->set_model(model_list_[0]);
+
 	unit_list_[1]->set_transform_position_x(0.0f);
 	unit_list_[1]->set_transform_position_z(100.0f);
 	transform = unit_list_[1]->get_transform();
 	transform.scale_.x = transform.scale_.y = transform.scale_.z = 10.0f;
 	transform.rotation_.y = XMConvertToRadians(180.0f);
 	unit_list_[1]->set_transform(transform);
+
+	return S_OK;
+}
+
+HRESULT GamePlayScene::PushUnit(Model *model) {
+	Unit *unit = new Unit();
+	if (unit == NULL) return E_FAIL;
+
+	unit->Init();
+	unit->set_model(model);
+
+	unit_list_.push_back(unit);
+
 	return S_OK;
 }
 

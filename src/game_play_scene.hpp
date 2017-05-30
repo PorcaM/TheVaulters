@@ -36,42 +36,52 @@ extern XMMATRIX                g_Projection;
 	@author	¿Ãº∫¡ÿ
 	@brief
 */
-class GamePlayScene : public Scene{
-private:
-	typedef vector<Model*> ModelList;
-	typedef vector<Unit*> UnitList;
+class GamePlayScene : public Scene
+{
+public:
+	typedef vector<Model*>	ModelList;
+	typedef vector<Unit*>	UnitList;
 
-	struct Theme {
-		XMVECTORF32 background_color_;
+	struct Theme 
+	{
+		XMVECTORF32			background_color;
+	};
+	struct GameInfo
+	{
+		int					player_cnt;
 	};
 
-	HRESULT InitTheme();
-	HRESULT InitModels();
-	HRESULT InitUnits();
-	HRESULT InitPlayer();
-	HRESULT InitMap();
-	HRESULT InitLights();
-	HRESULT InitConstantBuffer();
-	HRESULT InitPhysics();
-	HRESULT InitCameraControl();
+	GamePlayScene() {};
+	~GamePlayScene();
+	virtual HRESULT			Init();
+	virtual void			Render();
+	virtual void			Update();
+	virtual void			HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
+	void					RenderUnitList();
+	HRESULT					PushUnit(Model *model);
 
-	Theme theme_;
-	ConstantBuffer constant_buffer_;
-	ModelList model_list_;
-	UnitList unit_list_;
-	Map *map_;
-	Physics physics_;
-	Player player_;
-public:
-	CameraControl *camera_control_;
-	UnitControl *unit_control_;
-	XMFLOAT4 vLightDirs[2];
-	XMFLOAT4 vLightColors[2];
+	CameraControl*			camera_control_;
+	UnitControl*			unit_control_;
+	XMFLOAT4				vLightDirs[2];
+	XMFLOAT4				vLightColors[2];
 
-	GamePlayScene(){};
-	virtual HRESULT Init();
-	virtual void Render();
-	virtual void Update();
-	virtual void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
-	void RenderUnitList();
+private:
+	HRESULT 				InitTheme();
+	HRESULT 				InitModels();
+	HRESULT 				InitUnits();
+	HRESULT 				InitPlayer();
+	HRESULT 				InitMap();
+	HRESULT 				InitLights();
+	HRESULT 				InitConstantBuffer();
+	HRESULT 				InitPhysics();
+	HRESULT 				InitCameraControl();
+
+	Theme 					theme_;
+	ConstantBuffer 			constant_buffer_;
+	ModelList 				model_list_;
+	UnitList 				unit_list_;
+	Map*					map_;
+	Physics 				physics_;
+	Player 					player_;
+
 };
