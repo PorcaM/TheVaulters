@@ -21,12 +21,12 @@ using namespace DirectX;
 class Transform{
 public:
 	XMFLOAT3 position_;
-	XMFLOAT3 rotation_;
+	XMFLOAT2 rotation_;
 	XMFLOAT3 scale_;
 
 	Transform() {
 		position_	= XMFLOAT3(0.0f, 0.0f, 0.0f);
-		rotation_	= XMFLOAT3(0.0f, 0.0f, 0.0f);
+		rotation_	= XMFLOAT2(0.0f, 0.0f);
 		scale_		= XMFLOAT3(1.0f, 1.0f, 1.0f);
 	}
 };

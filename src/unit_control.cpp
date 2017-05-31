@@ -16,7 +16,7 @@ void UnitControl::Move(Direction direction) {
 	Transform transform = unit_->get_transform();
 	Rigidbody rigidbody = unit_->get_ridigbody();
 	float speed = 100.0f;
-	float yaw = unit_->getYawControl();
+	float yaw = unit_->get_transform_rotation_y();
 
 	if (direction == kForward) {
 		rigidbody.v_.z = speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
@@ -59,9 +59,11 @@ void UnitControl::Vault(float charge) {
 	float power = 3000.0f;
 	Rigidbody rigidbody = unit_->get_ridigbody();
 	Transform transform = unit_->get_transform();
-	float yaw = unit_->getYawControl();
+
+	float yaw = unit_->get_transform_rotation_y();
 	rigidbody.v_.z = power * cos(XMConvertToDegrees(-yaw) / 10.0f);
 	rigidbody.v_.x = power * sin(XMConvertToDegrees(-yaw) / 10.0f);
+
 	unit_->set_rigidbody(rigidbody);
 	unit_->set_state(Unit::State::kVault);
 }

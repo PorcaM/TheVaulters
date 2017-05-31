@@ -64,7 +64,7 @@ public:
 	void RenderUnitList();
 	HRESULT PushUnit(Model *model);
 
-	CameraControl*			camera_control_;
+	Camera*					camera_;
 	UnitControl*			unit_control_;
 	XMFLOAT4				vLightDirs[2];
 	XMFLOAT4				vLightColors[2];

@@ -35,14 +35,15 @@ public:
 
 	void set_state(State state) { state_ = state; }
 	State get_state() { return state_; }
-	void setYawControl(float yaw) { yaw_ = yaw; }
-	float getYawControl() { return yaw_; }
 	void setSpeedControl(float speed) { speed_ = speed; }
 	Transform get_transform() const { return transform_; }
 	Rigidbody get_ridigbody() const { return rigidbody_; }
+	float get_transform_rotation_y() { return this->transform_.rotation_.y; }
+	float get_transform_rotation_x() { return this->transform_.rotation_.x; }
 	void set_transform(Transform transform) { transform_ = transform; }
 	void set_rigidbody(Rigidbody rigidbody) { rigidbody_ = rigidbody; }
-	void set_transform_rotation(XMFLOAT3 rotation) { transform_.rotation_ = rotation; }
+	void set_transform_rotation(XMFLOAT2 rotation) { transform_.rotation_ = rotation; }
+	// void set_transform_rotattion_y(float y) { this->transform_.rotation_.y = y; }
 	void set_transform_position_x(float position_x) { transform_.position_.x = position_x; }
 	void set_transform_position_y(float position_y) { transform_.position_.y = position_y; }
 	void set_transform_position_z(float position_z) { transform_.position_.z = position_z; }
@@ -54,7 +55,6 @@ private:
 	Transform 				transform_;
 	Rigidbody 				rigidbody_;
 	Model*					model_;
-	float 					yaw_ = 0.0f;
 	float 					speed_ = 0.0f;
 	float 					angle_ = 0.0f;
 	bool					is_ground_;

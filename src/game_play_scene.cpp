@@ -82,9 +82,6 @@ void GamePlayScene::Update() {
 		player_.Update();
 
 		physics_.Update(delta_time);
-
-		// Camera control
-		camera_control_->updateCamera(&constant_buffer_);
 	}
 }
 
@@ -92,24 +89,16 @@ void GamePlayScene::Render() {
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color);
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
+	this->camera_->Update(&this->constant_buffer_);
+
 	RenderUnitList();
-	map_->Render(&constant_buffer_);
+	map_->Render(&this->constant_buffer_);
 
 	g_pSwapChain->Present(0, 0);
 }
 
 void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 	player_.HandleInput(message, wParam, lParam);
-
-	char input_device = 0;
-	switch (message) {
-	case WM_MOUSEWHEEL:	input_device = 'h';	break;
-	case WM_MOUSEMOVE:	input_device = 'm';	break;
-	case WM_KEYDOWN:	input_device = 'd';	break;
-	case WM_KEYUP:		input_device = 'u';	break;
-	}
-	if (input_device == 'h') { camera_control_->mouseWheelAction(wParam); }
-	if (input_device == 'm') { camera_control_->mouseMoveAction(lParam); }
 }
 
 HRESULT GamePlayScene::InitTheme() {
@@ -217,7 +206,8 @@ HRESULT GamePlayScene::InitPhysics(){
 }
 
 HRESULT GamePlayScene::InitCameraControl(){
-	camera_control_ = new CameraControl(player_.get_unit());
+	this->camera_ = new Camera(player_.get_unit());
+	player_.set_camera(this->camera_);
 	return S_OK;
 }
 

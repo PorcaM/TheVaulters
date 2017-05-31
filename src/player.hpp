@@ -8,6 +8,7 @@
 #pragma once
 
 #include "unit_control.hpp"
+#include "camera_control.hpp"
 
 /**
 	@class	Player
@@ -16,27 +17,21 @@
 	@brief
 */
 class Player {
-private:
+public:
 	struct VirtualKeyboard {
-		bool w;
-		bool a;
-		bool s;
-		bool d;
-		bool space;
+		bool					w;
+		bool					a;
+		bool					s;
+		bool					d;
+		bool					space;
 	};
 	struct VirtualMouse {
-		bool lb;
+		bool					lb;
+		float					x;
+		float					y;
+		bool					init;
 	};
 
-	VirtualKeyboard vk_;
-	VirtualMouse vm_;
-	Unit *unit_;
-	UnitControl *unit_control_;
-	float charge_;
-	float charge_speed_;
-	float max_charge_;
-
-public:
 	Player() {}
 	void Init();
 	void Update();
@@ -46,8 +41,21 @@ public:
 	UnitControl *get_unit_control() const { return unit_control_; }
 	void set_unit(Unit *unit) { unit_ = unit; }
 	void set_unit_control(UnitControl *unit_control) { unit_control_ = unit_control; }
+	void set_camera(Camera *camera) { this->camera_ = camera; }
 	void set_charge(float charge) {
 		charge_ = charge;
 		if (charge_ > max_charge_) charge_ = max_charge_;
 	}
+
+private:
+	VirtualKeyboard				vk_;
+	VirtualMouse				vm_;
+	Unit*						unit_;
+	UnitControl*				unit_control_;
+	Camera*						camera_;
+	float						charge_;
+	float						charge_speed_;
+	float						max_charge_;
+	float						rotation_sensitivity_ = 15.0f;
+
 };

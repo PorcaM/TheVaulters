@@ -76,6 +76,6 @@ void Map::Render(ConstantBuffer *contant_buffer) {
 	}
 }
 
-bool Map::IsTerrain(float x, float z) {
+bool Map::IsTerrain(XMFLOAT3 position) {
 	return true;
 }

@@ -45,7 +45,7 @@ public:
 	~Map();
 	void Init(char *mapFile);
 	void Render(ConstantBuffer *contant_buffer);
-	bool IsTerrain(float x, float z);
+	bool IsTerrain(XMFLOAT3 position);
 
 	void set_hexagon(Model *hexagon) { hexagon_ = hexagon; side_length_ = hexagon->XExtent(); }
 

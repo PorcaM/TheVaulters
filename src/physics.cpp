@@ -138,5 +138,5 @@ void Physics::Reaction(Unit *unit1, Unit *unit2) {
 
 bool Physics::IsTerrain(Unit *unit) {
 	Transform transform = unit->get_transform();
-	return map_->IsTerrain(transform.position_.x, transform.position_.z);
+	return map_->IsTerrain(unit->get_transform().position_);
 }
