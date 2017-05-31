@@ -11,6 +11,8 @@
 #include "unit.hpp"
 #include "map.hpp"
 
+using namespace std;
+
 /**
 	@class	Physics
 	@date	2017/5/21

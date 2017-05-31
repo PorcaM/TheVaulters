@@ -90,13 +90,29 @@ void Physics::Force(float delta_time) {
 bool Physics::IsCollision(Unit *u1, Unit *u2) {
 	XMFLOAT3 base = u1->get_transform().position_;
 	XMFLOAT3 offset = u2->get_transform().position_;
-	float width = u1->get_ridigbody().width_;
-	float depth = u1->get_ridigbody().depth_;
-	float height = u1->get_ridigbody().height_;
-	
-	if (abs(base.x - offset.x) > width) return false;
-	if (abs(base.z - offset.z) > depth) return false;
-	if (abs(base.y - offset.y) > height) return false;
+
+
+	// Compare y axis
+	if (fabs(base.y - offset.y) > u1->get_ridigbody().height_) 
+	{
+		return false;
+	}
+
+	// Compare projection world
+	base.y = offset.y = 0;
+	XMVECTOR vector1 = XMLoadFloat3(&base);
+	XMVECTOR vector2 = XMLoadFloat3(&offset);
+	XMVECTOR diff = XMVectorSubtract(vector1, vector2);
+	XMVECTOR length = XMVector3Length(diff);
+
+	float distance = 0.0f;
+	XMStoreFloat(&distance, length);
+
+	if (distance > (u1->get_ridigbody().radius_ + u2->get_ridigbody().radius_))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -111,7 +127,7 @@ void Physics::Reaction(Unit *unit1, Unit *unit2) {
 	rigidbody2.v_.x = v1.x;
 	rigidbody2.v_.y = v1.y;
 	rigidbody2.v_.z = v1.z;
-	rigidbody1.v_.y += 10.0f;
+	rigidbody1.v_.y += 1.0f;
 	unit1->set_rigidbody(rigidbody1);
 	unit2->set_rigidbody(rigidbody2);
 }
