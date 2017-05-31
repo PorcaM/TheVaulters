@@ -18,10 +18,13 @@ public:
 		XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	};
 
-	Camera(Unit* player_unit);
+	Camera(Unit* unit);
 	void Update(ConstantBuffer* cb);
 
-	Unit* player_unit_;
+	void set_unit(Unit *unit) { this->unit_ = unit; }
+	Unit* get_unit() { return this->unit_; }
+
+	Unit* unit_;
 
 	// Rotation
 	float rot_x_ = 0.0f;
