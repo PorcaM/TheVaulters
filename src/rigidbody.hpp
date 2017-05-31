@@ -40,6 +40,6 @@ public:
 		width_ = 10.0f;
 		depth_ = 10.0f;
 		height_ = 10.0f;
-		radius_ = 5.0f;
+		radius_ = 8.0f;
 	}
 };

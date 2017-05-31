@@ -55,10 +55,11 @@ void Physics::Force(float delta_time) {
 		it != unit_list_->end(); it++) {
 		Unit *unit = *it;
 		Rigidbody rigidbody = unit->get_ridigbody();
+		Transform transform = unit->get_transform();
+
 		float delta_x = rigidbody.v_.x * delta_time;
 		float delta_y = rigidbody.v_.y * delta_time;
 		float delta_z = rigidbody.v_.z * delta_time;
-		Transform transform = unit->get_transform();
 		transform.position_.x += delta_x;
 		transform.position_.y += delta_y;
 		transform.position_.z += delta_z;
@@ -67,8 +68,8 @@ void Physics::Force(float delta_time) {
 			rigidbody.v_.x -= air_resistance * delta_x;
 			rigidbody.v_.z -= air_resistance * delta_z;
 		}
-		if (rigidbody.v_.x <= minimun_velocity_) rigidbody.v_.x = 0;
-		if (rigidbody.v_.z <= minimun_velocity_) rigidbody.v_.z = 0;
+		if (fabs(rigidbody.v_.x) <= minimun_velocity_) rigidbody.v_.x = 0;
+		if (fabs(rigidbody.v_.z) <= minimun_velocity_) rigidbody.v_.z = 0;
 
 		if (IsTerrain(unit) && transform.position_.y < 0) {
 			transform.position_.y = 0;
@@ -78,6 +79,7 @@ void Physics::Force(float delta_time) {
 		unit->set_transform(transform);
 		unit->set_rigidbody(rigidbody);
 
+		// Update state if idle
 		if (rigidbody.v_.x == 0.0f &&
 			rigidbody.v_.y == 0.0f &&
 			rigidbody.v_.z == 0.0f)
@@ -91,14 +93,13 @@ bool Physics::IsCollision(Unit *u1, Unit *u2) {
 	XMFLOAT3 base = u1->get_transform().position_;
 	XMFLOAT3 offset = u2->get_transform().position_;
 
-
 	// Compare y axis
 	if (fabs(base.y - offset.y) > u1->get_ridigbody().height_) 
 	{
 		return false;
 	}
 
-	// Compare projection world
+	// Compare projection world (x and y axis)
 	base.y = offset.y = 0;
 	XMVECTOR vector1 = XMLoadFloat3(&base);
 	XMVECTOR vector2 = XMLoadFloat3(&offset);
@@ -117,19 +118,22 @@ bool Physics::IsCollision(Unit *u1, Unit *u2) {
 }
 
 void Physics::Reaction(Unit *unit1, Unit *unit2) {
-	Rigidbody rigidbody1 = unit1->get_ridigbody();
-	Rigidbody rigidbody2 = unit2->get_ridigbody();
-	XMFLOAT3 v1 = rigidbody1.v_;
-	XMFLOAT3 v2 = rigidbody2.v_;
-	rigidbody1.v_.x = v2.x;
-	rigidbody1.v_.y = v2.y;
-	rigidbody1.v_.z = v2.z;
-	rigidbody2.v_.x = v1.x;
-	rigidbody2.v_.y = v1.y;
-	rigidbody2.v_.z = v1.z;
-	rigidbody1.v_.y += 1.0f;
-	unit1->set_rigidbody(rigidbody1);
-	unit2->set_rigidbody(rigidbody2);
+	if (unit1->get_state() != Unit::State::kReaction &&
+		unit2->get_state() != Unit::State::kReaction)
+	{
+		Rigidbody rigidbody1 = unit1->get_ridigbody();
+		Rigidbody rigidbody2 = unit2->get_ridigbody();
+		XMFLOAT3 v1 = rigidbody1.v_;
+		XMFLOAT3 v2 = rigidbody2.v_;
+		rigidbody1.v_ = v2;
+		rigidbody2.v_ = v1;
+		unit1->set_rigidbody(rigidbody1);
+		unit2->set_rigidbody(rigidbody2);
+
+		// Update state
+		unit1->set_state(Unit::State::kReaction);
+		unit2->set_state(Unit::State::kReaction);
+	}
 }
 
 bool Physics::IsTerrain(Unit *unit) {

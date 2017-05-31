@@ -8,54 +8,71 @@
 #include "map.hpp"
 #include <time.h>
 
+Map::Map() {}
+
+Map::~Map()
+{
+	for (TerrainList::iterator it = this->terrain_list_.begin();
+		it != this->terrain_list_.end(); it++)
+	{
+		Terrain* terrain = *it;
+		delete terrain;
+	}
+}
+
 void Map::Init(char *mapFile) {
 	ifstream file(mapFile);
-	file >> depth_;
-	file >> width_ >> height_;
-	for (int i = 0; i < width_*height_; i++) {
-		Terrian temp;
-		file >> temp.id;
-		temp.index = i;
-		terrian_list_.push_back(temp);
+
+	// Read meta data
+	int depth, width, height;
+	file >> depth;
+	file >> width >> height;
+	
+	// Read terrain list
+	for (int i = 0; i < width * height; i++) 
+	{
+		Terrain* terrain		= new Terrain();
+		int id;
+		file >> id;
+		terrain->id				= id;
+		terrain->index			= i;
+		this->terrain_list_.push_back(terrain);
 	}
-	scale_ = 2.0f;
-	size_ = scale_ * 85.0f;
+
+	// Set map data
+	this->depth_				= depth;
+	this->width_				= width;
+	this->height_				= height;
+	this->scale_				= 2.0f;
+	this->size_					= scale_ * 85.0f;
 }
 
 void Map::Render(ConstantBuffer *contant_buffer) {
-	int cnt = 1;
-	float light_intencity = 1.0f;
-	for (vector<Terrian>::iterator it = terrian_list_.begin();
-		it != terrian_list_.end(); it++) {
-		// Set local position
-		int x = it->index % width_;
-		float y = -1.0f;
-		int z = it->index / height_;
+	for (TerrainList::iterator it = this->terrain_list_.begin();
+		it != this->terrain_list_.end(); it++) 
+	{
+		Terrain* terrain = *it;
 
-		// Set constant buffer
-		float trans_x = 0.0f;
-		if (z % 2 == 1) { trans_x = size_ / 2; }
+		// Get local index
+		int x = terrain->index % this->width_;
+		int z = terrain->index / this->height_;
 
-		if (it->objCode == 1)
-			y = -20.0f;
+		// Set matrix
+		float interval = this->scale_ * this->side_length_;
+		float z_offset = (interval * sqrtf(3) / 2) * !(x % 2);
+		XMFLOAT3 position = XMFLOAT3(x * interval * 1.5f,
+									0,
+									z * interval * sqrtf(3) + z_offset);
+		XMMATRIX translationMatrix = XMMatrixTranslationFromVector(XMLoadFloat3(&position));
+		XMMATRIX scaleMatrix = XMMatrixScaling(this->scale_, this->scale_, this->scale_);
 
-		XMMATRIX translationMatrix = XMMatrixTranslation(x * size_ + trans_x, y, z * (size_ * 0.3f));
-		XMMATRIX scaleMatrix = XMMatrixScaling(scale_, scale_, scale_);
-
-		it->Pos.x = x * size_ + trans_x;
-		it->Pos.y = z * ( size_ * 0.3f );
-		it->size = scale_;
-
-		contant_buffer->mWorld = XMMatrixTranspose(translationMatrix)*XMMatrixTranspose(scaleMatrix)*XMMatrixTranspose(g_World);
+		// Render hexagon
+		contant_buffer->mWorld = 
+			XMMatrixTranspose(translationMatrix) *
+			XMMatrixTranspose(scaleMatrix) *
+			XMMatrixTranspose(g_World);
 		g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, contant_buffer, 0, 0);
-
 		hexagon_->Render();
-		if (cnt < 50) {
-			cnt++;
-		}
-		if (light_intencity > 0.0f) {
-			light_intencity -= 0.1f;
-		}
 	}
 }
 

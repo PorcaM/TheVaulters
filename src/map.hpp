@@ -22,13 +22,13 @@ extern XMMATRIX                g_World;
 	@author	¿Ãº∫¡ÿ
 	@brief
 */
-class Terrian{
+class Terrain{
 public:
-	int id;
-	int index;
-	int objCode = 0;
-	XMFLOAT2 Pos;
-	float size = 0.0f;
+	int						id;
+	int						index;
+	int						obj_code = 0;
+	XMFLOAT3				position;
+	float					size = 0.0f;
 };
 
 /**
@@ -39,20 +39,24 @@ public:
 */
 class Map{
 public:
+	typedef vector<Terrain*> TerrainList;
+
+	Map();
+	~Map();
 	void Init(char *mapFile);
 	void Render(ConstantBuffer *contant_buffer);
-	vector<Terrian>* getTerrainList() { return &terrian_list_; }
 	bool IsTerrain(float x, float z);
 
-	void set_hexagon(Model *hexagon) { hexagon_ = hexagon; }
+	void set_hexagon(Model *hexagon) { hexagon_ = hexagon; side_length_ = hexagon->XExtent(); }
 
 private:
-	int				id_;
-	int				width_;
-	int				height_;
-	int				depth_;
-	float			scale_;
-	float			size_;
-	vector<Terrian> terrian_list_;
-	Model*			hexagon_;
+	int						id_;
+	int						width_;
+	int						height_;
+	int						depth_;
+	float					scale_;
+	float					size_;
+	float					side_length_;
+	vector<Terrain*>		terrain_list_;
+	Model*					hexagon_;
 };

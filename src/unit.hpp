@@ -30,6 +30,8 @@ public:
 	Unit() { state_ = State::kIdle; }
 	void Init() { rigidbody_.Init(); }
 	void Render(ConstantBuffer *constant_buffer);
+	bool IsGround() { return is_ground_; }
+	void SetIsGround(bool is_ground) { this->is_ground_ = is_ground; }
 
 	void set_state(State state) { state_ = state; }
 	State get_state() { return state_; }
@@ -47,6 +49,7 @@ public:
 	void set_model(Model *model) { model_ = model; }
 
 private:
+
 	State 					state_;
 	Transform 				transform_;
 	Rigidbody 				rigidbody_;
@@ -54,4 +57,5 @@ private:
 	float 					yaw_ = 0.0f;
 	float 					speed_ = 0.0f;
 	float 					angle_ = 0.0f;
+	bool					is_ground_;
 };

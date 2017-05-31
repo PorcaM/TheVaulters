@@ -24,6 +24,8 @@ HRESULT Model::InitFromObj(const wchar_t *obj_file) {
 		return hr;
 	}
 
+	this->x_extent_ = wfr.bounds.Extents.x;
+
 	//vertex buffer
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));

@@ -30,11 +30,6 @@ extern ID3D11Device*           g_pd3dDevice;
 	@brief	°¢ ¸ðµ¨ °´Ã¼µé
 */
 class Model {
-private:
-	ID3D11Buffer *vertex_buffer_;
-	ID3D11Buffer *index_buffer_;
-	int index_count_;
-	UINT stride_;
 public:
 	Model() {
 		vertex_buffer_ = index_buffer_ = nullptr; index_count_ = 0;
@@ -47,4 +42,12 @@ public:
 	ID3D11Buffer *get_vertex_buffer() const { return vertex_buffer_; }
 	ID3D11Buffer *get_index_buffer() const { return index_buffer_; }
 	int get_index_count() const { return index_count_; }
+	float XExtent() { return x_extent_; }
+
+private:
+	ID3D11Buffer*			vertex_buffer_;
+	ID3D11Buffer*			index_buffer_;
+	int						index_count_;
+	UINT					stride_;
+	float					x_extent_;
 };

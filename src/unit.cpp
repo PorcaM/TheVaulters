@@ -14,16 +14,13 @@ void Unit::Render(ConstantBuffer *constant_buffer) {
 	XMFLOAT3 rotation	= transform.rotation_;
 	XMFLOAT3 scale		= transform.scale_;
 	XMMATRIX translationMatrix = XMMatrixTranslation(position.x, position.y, position.z);
-	XMMATRIX rotationMatrix = XMMatrixRotationZ(rotation.z)*
-		XMMatrixRotationY(rotation.y)*
-		XMMatrixRotationX(rotation.x);
+
 	XMMATRIX scalingMatrix = XMMatrixScaling(scale.x, scale.y, scale.z);
 
 	XMMATRIX yawMatrix = XMMatrixRotationRollPitchYaw(0.0f, XMConvertToDegrees(-yaw_)/10.0f, 0.0f);
 
 	constant_buffer->mWorld = 
 		XMMatrixTranspose(translationMatrix) *
-		XMMatrixTranspose(rotationMatrix) *
 		XMMatrixTranspose(scalingMatrix) * 
 		XMMatrixTranspose(yawMatrix) *
 		XMMatrixTranspose(g_World);
