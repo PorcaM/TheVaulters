@@ -1,7 +1,7 @@
 /**
 	@file	unit_control.hpp
 	@date	2017/5/21
-	@author	ÀÌÇöµ¿
+	@author	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@brief
 */
 #pragma once
@@ -12,24 +12,9 @@
 /**
 	@class	UnitControl
 	@date	2017/5/21
-	@author	ÀÌÇöµ¿
+	@author	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@brief
 */
 class UnitControl {
 public:
-	enum Direction {
-		kForward, kBehind, kLeft, kRight,
-	};
-
-	UnitControl() {};
-	void Init();
-	void Move(Direction direction);
-	void Jump();
-	void Vault(float charge);
-
-	void set_unit(Unit *unit) { unit_ = unit; }
-
-private:
-	Unit* unit_;
-
 };

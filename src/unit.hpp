@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <directxmath.h>
 #include "transform.hpp"
 #include "model.hpp"
 #include "rigidbody.hpp"
@@ -26,10 +27,17 @@ public:
 	{
 		kIdle, kDead, kWalk, kJump, kVault, kReaction
 	};
+	enum Direction {
+		kForward, kBehind, kLeft, kRight,
+	};
 
 	Unit() { state_ = State::kIdle; }
 	void Init() { rigidbody_.Init(); }
 	void Render(ConstantBuffer *constant_buffer);
+	void Move(Direction direction);
+	void Jump();
+	void Vault(float charge);
+
 	bool IsGround() { return is_ground_; }
 	void SetIsGround(bool is_ground) { this->is_ground_ = is_ground; }
 

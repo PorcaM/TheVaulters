@@ -1,7 +1,7 @@
 /**
 	@file	unit.cpp
 	@datea	2017/5/16
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -23,8 +23,68 @@ void Unit::Render(ConstantBuffer *constant_buffer) {
 		XMMatrixTranspose(scalingMatrix) * 
 		XMMatrixTranspose(yawMatrix) *
 		XMMatrixTranspose(g_World);
-
 	g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, constant_buffer, 0, 0);
 
 	model_->Render();
+}
+
+void Unit::Move(Direction direction) {
+	Unit::State state = this->get_state();
+	if (state != Unit::State::kIdle && 
+		state != Unit::State::kWalk)
+		return;
+
+	Transform transform = this->get_transform();
+	Rigidbody rigidbody = this->get_ridigbody();
+	float speed = 100.0f;
+	float yaw = this->get_transform_rotation_y();
+
+	if (direction == kForward) {
+		rigidbody.v_.z = speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		rigidbody.v_.x = speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	}
+
+	if (direction == kBehind) {
+		rigidbody.v_.z = -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		rigidbody.v_.x = -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	}
+
+	if (direction == kLeft) {
+		rigidbody.v_.x = -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		rigidbody.v_.z = speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	}
+
+	if (direction == kRight) {
+		rigidbody.v_.x = speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		rigidbody.v_.z = -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	}
+	
+	this->set_rigidbody(rigidbody);
+	this->set_transform(transform);
+	this->set_state(Unit::State::kWalk);
+}
+
+void Unit::Jump() {
+	Unit::State state = this->get_state();
+	if (state != Unit::State::kIdle &&
+		state != Unit::State::kWalk) 
+		return;
+
+	Rigidbody rigidbody = this->get_ridigbody();
+	rigidbody.v_.y = 300.0f;
+	this->set_rigidbody(rigidbody);
+	this->set_state(Unit::State::kJump);
+}
+
+void Unit::Vault(float charge) {
+	float power = 3000.0f;
+	Rigidbody rigidbody = this->get_ridigbody();
+	Transform transform = this->get_transform();
+
+	float yaw = this->get_transform_rotation_y();
+	rigidbody.v_.z = power * cos(XMConvertToDegrees(-yaw) / 10.0f);
+	rigidbody.v_.x = power * sin(XMConvertToDegrees(-yaw) / 10.0f);
+
+	this->set_rigidbody(rigidbody);
+	this->set_state(Unit::State::kVault);
 }

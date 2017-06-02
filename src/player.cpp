@@ -1,7 +1,7 @@
 /**
 	@file	player.cpp
 	@date	2017/5/25
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -16,16 +16,19 @@ void Player::Init() {
 	max_charge_ = 10.0f;
 }
 
-void Player::Update() {
-	if (unit_control_ != NULL)
+void Player::Update() 
+{
+	if (this->unit_ == NULL)
 	{
-		if (vk_.w) unit_control_->Move(UnitControl::Direction::kForward);
-		if (vk_.a) unit_control_->Move(UnitControl::Direction::kLeft);
-		if (vk_.s) unit_control_->Move(UnitControl::Direction::kBehind);
-		if (vk_.d) unit_control_->Move(UnitControl::Direction::kRight);
-		if (vk_.space) { unit_control_->Jump(); vk_.space = false; }
-		if (vm_.lb) set_charge(charge_ + charge_speed_);
+		MessageBox(nullptr,
+			L"No assigned unit to the player.", L"Error", MB_OK);
 	}
+	if (vk_.w) this->unit_->Move(Unit::Direction::kForward);
+	if (vk_.a) this->unit_->Move(Unit::Direction::kLeft);
+	if (vk_.s) this->unit_->Move(Unit::Direction::kBehind);
+	if (vk_.d) this->unit_->Move(Unit::Direction::kRight);
+	if (vk_.space) { this->unit_->Jump(); vk_.space = false; }
+	if (vm_.lb) set_charge(charge_ + charge_speed_);
 }
 
 void Player::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
@@ -57,7 +60,7 @@ void Player::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 		break;
 	case WM_LBUTTONUP:
 		vm_.lb = false;
-		unit_control_->Vault(charge_);
+		this->unit_->Vault(charge_);
 		break;
 	case WM_MOUSEMOVE:
 		if (this->vm_.init) 

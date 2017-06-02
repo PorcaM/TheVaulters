@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "unit_control.hpp"
+#include "unit.hpp"
 #include "camera_control.hpp"
 
 /**
@@ -37,21 +37,18 @@ public:
 	void Update();
 	void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
 
-	Unit *get_unit() const { return unit_; }
-	UnitControl *get_unit_control() const { return unit_control_; }
-	void set_unit(Unit *unit) { unit_ = unit; }
-	void set_unit_control(UnitControl *unit_control) { unit_control_ = unit_control; }
+	Unit *get_unit() const { return this->unit_; }
+	void set_unit(Unit *unit) { this->unit_ = unit; }
 	void set_camera(Camera *camera) { this->camera_ = camera; }
 	void set_charge(float charge) {
-		charge_ = charge;
-		if (charge_ > max_charge_) charge_ = max_charge_;
+		if (charge > this->max_charge_) charge = this->max_charge_;
+		this->charge_ = charge;
 	}
 
 private:
 	VirtualKeyboard				vk_;
 	VirtualMouse				vm_;
 	Unit*						unit_;
-	UnitControl*				unit_control_;
 	Camera*						camera_;
 	float						charge_;
 	float						charge_speed_;

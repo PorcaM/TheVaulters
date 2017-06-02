@@ -166,8 +166,6 @@ HRESULT GamePlayScene::PushUnit(Model *model) {
 HRESULT GamePlayScene::InitPlayer(){
 	player_.Init();
 	player_.set_unit(unit_list_[0]);
-	player_.set_unit_control(new UnitControl());
-	player_.get_unit_control()->set_unit(player_.get_unit());
 	return S_OK;
 }
 
