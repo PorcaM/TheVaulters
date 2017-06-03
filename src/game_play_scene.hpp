@@ -1,8 +1,7 @@
 /**
 	@file	game_play_scene.hpp
-	@datea	2017/5/16
-	@author	¿Ãº∫¡ÿ
-	@brief
+	@date	2017/5/16
+	@author	Ïù¥ÏÑ±Ï§Ä
 */
 
 #pragma once
@@ -33,7 +32,7 @@ extern XMMATRIX                g_Projection;
 /**
 	@class	GamePlayScene
 	@datea	2017/5/16
-	@author	¿Ãº∫¡ÿ
+	@author Ïù¥ÏÑ±Ï§Ä
 	@brief
 */
 class GamePlayScene : public Scene
@@ -90,5 +89,5 @@ private:
 	Physics 				physics_;
 	Player 					player_;
 	float					curr_time_;
-
+	int						winner_id_;
 };

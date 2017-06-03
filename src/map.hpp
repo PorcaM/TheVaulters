@@ -43,11 +43,15 @@ public:
 
 	Map();
 	~Map();
-	void Init(char *mapFile);
+	void Init(char *mapFile, Model *hexagon);
 	void Render(ConstantBuffer *contant_buffer);
-	bool IsTerrain(XMFLOAT3 position);
+	bool TerrainExist(XMFLOAT3 position);
 
-	void set_hexagon(Model *hexagon) { hexagon_ = hexagon; side_length_ = hexagon->XExtent(); }
+	void set_hexagon(Model *hexagon)
+	{
+		this->hexagon_ = hexagon;
+		this->side_length_ = hexagon->XExtent();
+	}
 
 private:
 	int						id_;

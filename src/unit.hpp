@@ -41,7 +41,11 @@ public:
 	bool IsGround() { return is_ground_; }
 	void SetIsGround(bool is_ground) { this->is_ground_ = is_ground; }
 
-	void set_state(State state) { state_ = state; }
+	void set_state(State state) 
+	{
+		if (this->state_ != Unit::State::kDead)
+		this->state_ = state; 
+	}
 	State get_state() { return state_; }
 	void setSpeedControl(float speed) { speed_ = speed; }
 	Transform get_transform() const { return transform_; }
@@ -58,12 +62,11 @@ public:
 	void set_model(Model *model) { model_ = model; }
 
 private:
-
 	State 					state_;
 	Transform 				transform_;
 	Rigidbody 				rigidbody_;
 	Model*					model_;
-	float 					speed_ = 0.0f;
+	float 					speed_ = 100.0f;
 	float 					angle_ = 0.0f;
 	bool					is_ground_;
 };

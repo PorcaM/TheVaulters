@@ -51,37 +51,48 @@ void GamePlayScene::RenderUnitList() {
 }
 
 void GamePlayScene::Update() {
-	if (IsEnd())
-	{
-		state_ = State::kEnd;
-	}
-	if (state_ == State::kPlay)
-	{
-		// Update our time
-		static float t = 0.0f;
-		if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+	switch(this->state_){
+		case GamePlayScene::State::kEnd:
 		{
-			t += (float)XM_PI * 0.0125f;
+			wstring message = L"Player " + to_wstring(this->winner_id_) + L" Win!!";
+			MessageBox(nullptr,
+			message.c_str(), L"Game End", MB_OK);
+			exit(0);
+			break;
 		}
-		else
+		case GamePlayScene::State::kPlay:
 		{
-			static ULONGLONG timeStart = 0;
-			ULONGLONG timeCur = GetTickCount64();
-			if (timeStart == 0)
-				timeStart = timeCur;
-			t = (timeCur - timeStart) / 1000.0f;
+			// Update our time
+			static float t = 0.0f;
+			if (g_driverType == D3D_DRIVER_TYPE_REFERENCE)
+			{
+				t += (float)XM_PI * 0.0125f;
+			}
+			else
+			{
+				static ULONGLONG timeStart = 0;
+				ULONGLONG timeCur = GetTickCount64();
+				if (timeStart == 0)
+					timeStart = timeCur;
+				t = (timeCur - timeStart) / 1000.0f;
+			}
+			curr_time_ = t;
+
+			static float time_prev = 0.0f;
+			static float time_curr = 0.0f;
+			float delta_time = time_curr - time_prev;
+			time_prev = time_curr;
+			time_curr = t;
+
+			player_.Update();
+			physics_.Update(delta_time);
+
+			if (IsEnd())
+			{
+				state_ = State::kEnd;
+			}
+			break;
 		}
-		curr_time_ = t;
-
-		static float time_prev = 0.0f;
-		static float time_curr = 0.0f;
-		float delta_time = time_curr - time_prev;
-		time_prev = time_curr;
-		time_curr = t;
-
-		player_.Update();
-
-		physics_.Update(delta_time);
 	}
 }
 
@@ -98,7 +109,21 @@ void GamePlayScene::Render() {
 }
 
 void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
-	player_.HandleInput(message, wParam, lParam);
+	// Send input data to the player
+	this->player_.HandleInput(message, wParam, lParam);
+
+	// Handle cheat key
+	if (message == WM_KEYDOWN)
+	{
+		if (wParam == 0x31)
+		{
+			this->unit_list_[0]->set_state(Unit::State::kDead);
+		}
+		if (wParam == 0x32)
+		{
+			this->unit_list_[1]->set_state(Unit::State::kDead);
+		}
+	}
 }
 
 HRESULT GamePlayScene::InitTheme() {
@@ -171,8 +196,7 @@ HRESULT GamePlayScene::InitPlayer(){
 
 HRESULT GamePlayScene::InitMap(){
 	map_ = new Map();
-	map_->Init("map/basic.txt");
-	map_->set_hexagon(model_list_[1]);
+	map_->Init("map/basic.txt", model_list_[1]);
 	return S_OK;
 }
 
@@ -212,6 +236,7 @@ HRESULT GamePlayScene::InitCameraControl(){
 bool GamePlayScene::IsEnd() 
 {
 	int non_dead_cnt = 0;
+	int i = 0;
 	for (UnitList::iterator it = unit_list_.begin();
 		it != unit_list_.end(); it++)
 	{
@@ -219,7 +244,9 @@ bool GamePlayScene::IsEnd()
 		if (unit->get_state() != Unit::State::kDead) 
 		{
 			non_dead_cnt++;
+			winner_id_ = i;
 		}
+		i++;
 	}
 	if (non_dead_cnt > 1)	return false;
 	else					return true;

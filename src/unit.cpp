@@ -1,7 +1,7 @@
 /**
 	@file	unit.cpp
 	@datea	2017/5/16
-	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
+	@author	ÀÌ¼ºÁØ
 	@brief
 */
 
@@ -16,7 +16,9 @@ void Unit::Render(ConstantBuffer *constant_buffer) {
 
 	XMMATRIX translationMatrix	= XMMatrixTranslationFromVector(XMLoadFloat3(&position));
 	XMMATRIX scalingMatrix		= XMMatrixScalingFromVector(XMLoadFloat3(&scale));
-	XMMATRIX yawMatrix = XMMatrixRotationRollPitchYaw(0.0f, XMConvertToDegrees(-rotation.y)/10.0f, 0.0f);
+	XMMATRIX yawMatrix 			= XMMatrixRotationRollPitchYaw(0.0f, 
+																XMConvertToDegrees(-rotation.y)/10.0f, 
+																0.0f);
 
 	constant_buffer->mWorld = 
 		XMMatrixTranspose(translationMatrix) *
@@ -36,28 +38,33 @@ void Unit::Move(Direction direction) {
 
 	Transform transform = this->get_transform();
 	Rigidbody rigidbody = this->get_ridigbody();
-	float speed = 100.0f;
+	float speed = this->speed_;
 	float yaw = this->get_transform_rotation_y();
 
-	if (direction == kForward) {
-		rigidbody.v_.z = speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		rigidbody.v_.x = speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	float x = 0.0f;
+	float z = 0.0f;
+	if (direction == kForward) 
+	{
+		z += speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		x += speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
 	}
-
-	if (direction == kBehind) {
-		rigidbody.v_.z = -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		rigidbody.v_.x = -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	if (direction == kBehind) 
+	{
+		z += -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		x += -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
 	}
-
-	if (direction == kLeft) {
-		rigidbody.v_.x = -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		rigidbody.v_.z = speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	if (direction == kLeft) 
+	{
+		x += -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		z += speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
 	}
-
-	if (direction == kRight) {
-		rigidbody.v_.x = speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		rigidbody.v_.z = -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	if (direction == kRight) 
+	{
+		x += speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
+		z += -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
 	}
+	rigidbody.v_.x = x;
+	rigidbody.v_.z = z;
 	
 	this->set_rigidbody(rigidbody);
 	this->set_transform(transform);

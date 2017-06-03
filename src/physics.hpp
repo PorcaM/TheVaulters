@@ -1,7 +1,7 @@
 /**
 	@file	physics.hpp
 	@date	2017/5/20
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -16,7 +16,7 @@ using namespace std;
 /**
 	@class	Physics
 	@date	2017/5/21
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 class Physics {
@@ -29,6 +29,7 @@ public:
 	void ScanCollision();
 	void Gravity(float delta_time);
 	void Force(float delta_time);
+	void CheckDead();
 
 	void set_map(Map *map) { map_ = map; }
 	void set_unit_list(UnitList *unit_list) { unit_list_ = unit_list; }
@@ -43,5 +44,5 @@ private:
 
 	UnitList*			unit_list_;
 	Map*				map_;
-
+	float 				deadline_ = -300.0f;
 };

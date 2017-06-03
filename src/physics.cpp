@@ -1,7 +1,7 @@
 /**
 	@file	physics.cpp
 	@date	2017/5/21
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -15,6 +15,7 @@ void Physics::Update(float delta_time)
 	Gravity(delta_time);
 	Force(delta_time);
 	ScanCollision();
+	CheckDead();
 }
 
 void Physics::ScanCollision() {
@@ -39,11 +40,13 @@ void Physics::Gravity(float delta_time) {
 		it != unit_list_->end(); it++) {
 		Unit *unit = *it;
 		Rigidbody rigidbody = unit->get_ridigbody();
-		if (unit->get_transform().position_.y > 0) {
+		if (IsTerrain(unit) == false) 
+		{
 			rigidbody.v_.y -= graviational_acceleration_ * delta_time * factor;
 		}
-		else {
-			// rigidbody.v_.y = 0;
+		else 
+		{
+			rigidbody.v_.y = 0;
 		}
 		unit->set_rigidbody(rigidbody);
 	}
@@ -138,5 +141,27 @@ void Physics::Reaction(Unit *unit1, Unit *unit2) {
 
 bool Physics::IsTerrain(Unit *unit) {
 	Transform transform = unit->get_transform();
-	return map_->IsTerrain(unit->get_transform().position_);
+	// return map_->TerrainExist(unit->get_transform().position_);
+	XMFLOAT3 position = transform.position_;
+	if (position.y > 0.0f) return false;
+	if ((position.x <= -30.0f || position.x >= 500.0f) ||
+		(position.z <= -20.0f || position.z >= 500.0f))
+	{
+		return false;
+	}
+	else return true;
+}
+
+void Physics::CheckDead()
+{
+	for (UnitList::iterator it = this->unit_list_->begin();
+		it != this->unit_list_->end(); it++) 
+	{
+		Unit* unit = *it;
+		float deadline = this->deadline_;
+		if (unit->get_transform().position_.y < deadline)
+		{
+			unit->set_state(Unit::State::kDead);
+		}
+	}
 }
