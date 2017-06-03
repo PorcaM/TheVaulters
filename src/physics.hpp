@@ -1,7 +1,7 @@
 /**
 	@file	physics.hpp
 	@date	2017/5/20
-	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
+	@author	ÀÌ¼ºÁØ
 	@brief
 */
 
@@ -16,15 +16,23 @@ using namespace std;
 /**
 	@class	Physics
 	@date	2017/5/21
-	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
+	@author	ÀÌ¼ºÁØ
 	@brief
 */
 class Physics {
 public:
+	struct PhysicalCoefficient
+	{
+		float 				graviational_acceleration;
+		float 				minimun_velocity;
+		float				ground_resistance;
+	};
+
 	typedef vector<Unit*> UnitList;
 
 	Physics() {}
-	void Init() {};
+	void Init();
+	void InitPhysicalCoefficient();
 	void Update(float delta_time);
 	void ScanCollision();
 	void Gravity(float delta_time);
@@ -42,7 +50,8 @@ private:
 	bool IsTerrain(Unit *unit);
 	void Reaction(Unit *u1, Unit *u2);
 
-	UnitList*			unit_list_;
-	Map*				map_;
-	float 				deadline_ = -300.0f;
+	UnitList*				unit_list_;
+	Map*					map_;
+	PhysicalCoefficient		pc_;
+	float 					deadline_ = -300.0f;
 };

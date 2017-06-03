@@ -1,14 +1,23 @@
 /**
 	@file	physics.cpp
 	@date	2017/5/21
-	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
+	@author	ÀÌ¼ºÁØ
 	@brief
 */
 
 #include "physics.hpp"
 
-const float Physics::graviational_acceleration_ = 9.8f;
-const float Physics::minimun_velocity_ = 0.01f;
+void Physics::Init()
+{
+	InitPhysicalCoefficient();
+}
+
+void Physics::InitPhysicalCoefficient()
+{
+	this->pc_.graviational_acceleration 	= 9.8f;
+	this->pc_.minimun_velocity 				= 0.01f;
+	this->pc_.ground_resistance 			= 10.0f;
+}
 
 void Physics::Update(float delta_time)
 {
@@ -42,18 +51,17 @@ void Physics::Gravity(float delta_time) {
 		Rigidbody rigidbody = unit->get_ridigbody();
 		if (IsTerrain(unit) == false) 
 		{
-			rigidbody.v_.y -= graviational_acceleration_ * delta_time * factor;
+			rigidbody.v_.y -= this->pc_.graviational_acceleration * delta_time * factor;
 		}
 		else 
 		{
-			rigidbody.v_.y = 0;
+			// rigidbody.v_.y = 0;
 		}
 		unit->set_rigidbody(rigidbody);
 	}
 }
 
 void Physics::Force(float delta_time) {
-	static const float air_resistance = 10.0f;
 	for (UnitList::iterator it = unit_list_->begin();
 		it != unit_list_->end(); it++) {
 		Unit *unit = *it;
@@ -68,11 +76,11 @@ void Physics::Force(float delta_time) {
 		transform.position_.z += delta_z;
 
 		if (IsTerrain(unit) && transform.position_.y <= 0) {
-			rigidbody.v_.x -= air_resistance * delta_x;
-			rigidbody.v_.z -= air_resistance * delta_z;
+			rigidbody.v_.x -= this->pc_.ground_resistance * delta_x;
+			rigidbody.v_.z -= this->pc_.ground_resistance * delta_z;
 		}
-		if (fabs(rigidbody.v_.x) <= minimun_velocity_) rigidbody.v_.x = 0;
-		if (fabs(rigidbody.v_.z) <= minimun_velocity_) rigidbody.v_.z = 0;
+		if (fabs(rigidbody.v_.x) <= this->pc_.minimun_velocity) rigidbody.v_.x = 0;
+		if (fabs(rigidbody.v_.z) <= this->pc_.minimun_velocity) rigidbody.v_.z = 0;
 
 		if (IsTerrain(unit) && transform.position_.y < 0) {
 			transform.position_.y = 0;

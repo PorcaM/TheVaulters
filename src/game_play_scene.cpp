@@ -222,6 +222,7 @@ HRESULT GamePlayScene::InitConstantBuffer(){
 }
 
 HRESULT GamePlayScene::InitPhysics(){
+	physics_.Init();
 	physics_.set_unit_list(&unit_list_);
 	physics_.set_map(map_);
 	return S_OK;
