@@ -55,7 +55,7 @@ void Physics::Gravity(float delta_time) {
 		}
 		else 
 		{
-			// rigidbody.v_.y = 0;
+			// do nothing
 		}
 		unit->set_rigidbody(rigidbody);
 	}

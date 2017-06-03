@@ -84,13 +84,17 @@ void Unit::Jump() {
 }
 
 void Unit::Vault(float charge) {
-	float power = 3000.0f;
+	float power = 500.0f;
 	Rigidbody rigidbody = this->get_ridigbody();
 	Transform transform = this->get_transform();
 
 	float yaw = this->get_transform_rotation_y();
 	rigidbody.v_.z = power * cos(XMConvertToDegrees(-yaw) / 10.0f);
 	rigidbody.v_.x = power * sin(XMConvertToDegrees(-yaw) / 10.0f);
+	float x = this->get_transform_rotation_x();
+	float x1 = XMConvertToDegrees(x);
+	float x2 = sin(x1 / 10.0f);
+	rigidbody.v_.y = power * x2;
 
 	this->set_rigidbody(rigidbody);
 	this->set_state(Unit::State::kVault);
