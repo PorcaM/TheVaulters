@@ -20,39 +20,50 @@ Map::~Map()
 	}
 }
 
-void Map::Init(char *mapFile, Model *model) {
+void Map::Init(const char *path, Model *model) {
 	set_hexagon(model);
+	ParseMapFile(path);
+}
 
-	ifstream file(mapFile);
+void Map::ParseMapFile(const char *path){
+	ifstream file(path);
 
 	// Read meta data
 	int depth, width, height;
 	file >> depth;
 	file >> width >> height;
 	
-	// Set map data
+	// Set meta data
 	this->depth_				= depth;
-	this->width_				= width;
-	this->height_				= height;
+	this->width_				= width+2;
+	this->height_				= height+2;
 	this->scale_				= 2.0f;
 	this->size_					= scale_ * 85.0f;
-
-	// Read terrain list
-	for (int i = 0; i < width * height; i++) 
+	for (int i = 0; i < this->width_ * this->height_; i++)
 	{
-		Terrain* terrain		= new Terrain();
-		int id;
-		file >> id;
-		terrain->id				= id;
-		terrain->index			= i;
-		int x = terrain->index % this->width_;
-		int z = terrain->index / this->height_;
-		float interval = this->scale_ * this->side_length_;
-		float z_offset = (interval * sqrtf(3) / 2) * (x % 2);
-		terrain->position.x 	= x * interval * 1.5f;
-		terrain->position.y 	= 0;
-		terrain->position.z 	= z * interval * sqrtf(3) + z_offset;
-		this->terrain_list_.push_back(terrain);
+		this->terrain_list_.push_back(new Terrain());
+	}
+
+	// Read terrain list data
+	for (int i = 0; i < height; i++) 
+	{
+		for (int j = 0; j < width; j++)
+		{
+			int index				= (i+1) * this->width_ + (j+1);
+			Terrain* terrain		= this->terrain_list_[index];
+			terrain->index			= index;
+			int id;
+			file >> id;
+			terrain->id				= id;
+			int x = terrain->index % this->width_;
+			int z = terrain->index / this->height_;
+			float interval = this->scale_ * this->side_length_;
+			float z_offset = (interval * sqrtf(3) / 2) * (x % 2);
+			terrain->position.x 	= x * interval * 1.5f;
+			terrain->position.y 	= 0;
+			terrain->position.z 	= z * interval * sqrtf(3) + z_offset;
+			this->terrain_list_.push_back(terrain);
+		}
 	}
 
 	file.close();
@@ -63,6 +74,7 @@ void Map::Render(ConstantBuffer *contant_buffer) {
 		it != this->terrain_list_.end(); it++) 
 	{
 		Terrain* terrain = *it;
+		if (terrain->id < 1) continue;
 		XMMATRIX translationMatrix = XMMatrixTranslationFromVector(XMLoadFloat3(&terrain->position));
 		float scale = this->scale_;
 		XMMATRIX scaleMatrix = XMMatrixScaling(scale,scale,scale);

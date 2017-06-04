@@ -43,7 +43,8 @@ public:
 
 	Map();
 	~Map();
-	void Init(char *mapFile, Model *hexagon);
+	void Init(const char *path, Model *hexagon);
+	void ParseMapFile(const char *path);
 	void Render(ConstantBuffer *contant_buffer);
 	bool TerrainExist(XMFLOAT3 position);
 
