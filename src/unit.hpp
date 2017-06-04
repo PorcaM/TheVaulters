@@ -54,6 +54,7 @@ public:
 	float get_transform_rotation_x() { return this->transform_.rotation_.x; }
 	void set_transform(Transform transform) { transform_ = transform; }
 	void set_rigidbody(Rigidbody rigidbody) { rigidbody_ = rigidbody; }
+	void set_transform_position(XMFLOAT3 position) {this->transform_.position_ = position;}
 	void set_transform_rotation(XMFLOAT2 rotation) { transform_.rotation_ = rotation; }
 	// void set_transform_rotattion_y(float y) { this->transform_.rotation_.y = y; }
 	void set_transform_position_x(float position_x) { transform_.position_.x = position_x; }

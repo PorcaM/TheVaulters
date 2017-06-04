@@ -47,7 +47,18 @@ public:
 	void ParseMapFile(const char *path);
 	void Render(ConstantBuffer *contant_buffer);
 	bool TerrainExist(XMFLOAT3 position);
-
+	
+	Terrain* get_terrain(int index)
+	{
+		int i = index / this->width_;
+		int j = index % this->width_;
+		int new_index = (i+1) * this->width_ + (j+1);
+		return this->terrain_list_[new_index];
+	}
+	int Length()
+	{
+		return this->width_ * this->height_;
+	}
 	void set_hexagon(Model *hexagon)
 	{
 		this->hexagon_ = hexagon;

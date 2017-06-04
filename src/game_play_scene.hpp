@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <cstdlib>
+#include <ctime>
 #include <vector>
 #include <string>
 #include <d3d11_1.h>
@@ -74,6 +76,7 @@ private:
 	HRESULT InitUnits();
 	HRESULT InitPlayer();
 	HRESULT InitMap();
+	HRESULT InitUnitsLocation();
 	HRESULT InitLights();
 	HRESULT InitConstantBuffer();
 	HRESULT InitPhysics();

@@ -1,7 +1,7 @@
 /**
 	@file	game_play_scene.cpp
 	@date	2017/5/16
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -28,6 +28,7 @@ HRESULT GamePlayScene::Init(){
 	hr = InitPlayer();
 
 	hr = InitMap();
+	InitUnitsLocation();
 
 	hr = InitLights();
 
@@ -197,6 +198,21 @@ HRESULT GamePlayScene::InitPlayer(){
 HRESULT GamePlayScene::InitMap(){
 	map_ = new Map();
 	map_->Init("map/basic.txt", model_list_[1]);
+	return S_OK;
+}
+
+HRESULT GamePlayScene::InitUnitsLocation()
+{
+	srand(time(NULL));
+	for (UnitList::iterator it = this->unit_list_.begin();
+		it != this->unit_list_.end(); it++)
+	{
+		Unit* unit = *it;
+		int length = map_->Length();
+		int index = rand() % length;
+		Terrain* terrain = map_->get_terrain(index);
+		unit->set_transform_position(terrain->position);
+	}
 	return S_OK;
 }
 
