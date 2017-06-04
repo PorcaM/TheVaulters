@@ -35,11 +35,11 @@ void Map::ParseMapFile(const char *path){
 	
 	// Set meta data
 	this->depth_				= depth;
-	this->width_				= width+2;
-	this->height_				= height+2;
+	this->width_				= width;
+	this->height_				= height;
 	this->scale_				= 2.0f;
 	this->size_					= scale_ * 85.0f;
-	for (int i = 0; i < this->width_ * this->height_; i++)
+	for (int i = 0; i < (this->width_ + 2) * (this->height_ + 2); i++)
 	{
 		this->terrain_list_.push_back(new Terrain());
 	}
@@ -49,20 +49,19 @@ void Map::ParseMapFile(const char *path){
 	{
 		for (int j = 0; j < width; j++)
 		{
-			int index				= (i+1) * this->width_ + (j+1);
+			int index				= (i+1) * (this->width_ + 2) + (j+1);
 			Terrain* terrain		= this->terrain_list_[index];
-			terrain->index			= index;
+			terrain->index			= i * this->width_ + j;
 			int id;
 			file >> id;
 			terrain->id				= id;
-			int x = terrain->index % this->width_;
-			int z = terrain->index / this->height_;
+			int x = index % (this->width_  + 2);
+			int z = index / (this->height_  + 2);
 			float interval = this->scale_ * this->side_length_;
 			float z_offset = (interval * sqrtf(3) / 2) * (x % 2);
 			terrain->position.x 	= x * interval * 1.5f;
 			terrain->position.y 	= 0;
 			terrain->position.z 	= z * interval * sqrtf(3) + z_offset;
-			this->terrain_list_.push_back(terrain);
 		}
 	}
 

@@ -56,6 +56,10 @@ public:
 	void set_rigidbody(Rigidbody rigidbody) { rigidbody_ = rigidbody; }
 	void set_transform_position(XMFLOAT3 position) {this->transform_.position_ = position;}
 	void set_transform_rotation(XMFLOAT2 rotation) { transform_.rotation_ = rotation; }
+	void set_transfrom_scale(float scale) {
+		this->transform_.scale_.x = this->transform_.scale_.y =
+			this->transform_.scale_.z = scale;
+	}
 	// void set_transform_rotattion_y(float y) { this->transform_.rotation_.y = y; }
 	void set_transform_position_x(float position_x) { transform_.position_.x = position_x; }
 	void set_transform_position_y(float position_y) { transform_.position_.y = position_y; }

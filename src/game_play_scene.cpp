@@ -160,20 +160,8 @@ HRESULT GamePlayScene::InitUnits(){
 	{
 		hr = PushUnit(unit_model);
 		if (hr == E_FAIL) return hr;
+		unit_list_[i]->set_transfrom_scale(10.0f);
 	}
-
-	unit_list_[0]->set_transform_position_y(30.0f);
-	Transform transform = unit_list_[0]->get_transform();
-	transform.scale_.x = transform.scale_.y = transform.scale_.z = 10.0f;
-	unit_list_[0]->set_transform(transform);
-
-	unit_list_[1]->set_transform_position_x(0.0f);
-	unit_list_[1]->set_transform_position_z(100.0f);
-	transform = unit_list_[1]->get_transform();
-	transform.scale_.x = transform.scale_.y = transform.scale_.z = 10.0f;
-	transform.rotation_.y = XMConvertToRadians(180.0f);
-	unit_list_[1]->set_transform(transform);
-
 	return S_OK;
 }
 

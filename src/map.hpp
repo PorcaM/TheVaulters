@@ -52,9 +52,12 @@ public:
 	{
 		int i = index / this->width_;
 		int j = index % this->width_;
-		int new_index = (i+1) * this->width_ + (j+1);
+		int new_index = (i+1) * (this->width_ + 2) + (j+1);
 		return this->terrain_list_[new_index];
 	}
+	int get_width() { return this->width_; }
+	int get_height() { return this->height_; }
+	int get_r() { return this->side_length_; }
 	int Length()
 	{
 		return this->width_ * this->height_;

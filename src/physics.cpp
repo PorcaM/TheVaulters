@@ -152,12 +152,21 @@ bool Physics::IsTerrain(Unit *unit) {
 	// return map_->TerrainExist(unit->get_transform().position_);
 	XMFLOAT3 position = transform.position_;
 	if (position.y > 0.0f) return false;
-	if ((position.x <= -30.0f || position.x >= 500.0f) ||
-		(position.z <= -20.0f || position.z >= 500.0f))
+
+	// Culling
+	int length = map_->Length();
+	float r = map_->get_r();
+	float x_min = map_->get_terrain(0)->position.x - r;
+	float z_min = map_->get_terrain(0)->position.z - (r * sqrtf(3) / 2.0f);
+	float x_max = map_->get_terrain(length-1)->position.x + r;
+	float z_max = map_->get_terrain(length-1)->position.z + (r * sqrtf(3) / 2.0f);
+	if ((position.x <= x_min || position.x >= x_max) ||
+		(position.z <= z_min || position.z >= z_max))
 	{
 		return false;
 	}
-	else return true;
+	
+	return true;
 }
 
 void Physics::CheckDead()
