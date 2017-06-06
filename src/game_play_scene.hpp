@@ -19,6 +19,7 @@
 #include "camera_control.hpp"
 #include "unit_control.hpp"
 #include "player.hpp"
+#include "ai.hpp"
 
 using namespace std;
 using namespace DirectX;
@@ -81,6 +82,7 @@ private:
 	HRESULT InitConstantBuffer();
 	HRESULT InitPhysics();
 	HRESULT InitCameraControl();
+	HRESULT InitAI();
 	bool IsEnd();
 
 	Theme 					theme_;
@@ -91,6 +93,7 @@ private:
 	Map*					map_;
 	Physics 				physics_;
 	Player 					player_;
+	AI						ai_;
 	float					curr_time_;
 	int						winner_id_;
 };

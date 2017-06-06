@@ -38,6 +38,9 @@ HRESULT GamePlayScene::Init(){
 
 	hr = InitCameraControl();
 
+	InitAI();
+	
+
 	state_ = State::kPlay;
 	curr_time_ = 0.0f;
 
@@ -86,6 +89,7 @@ void GamePlayScene::Update() {
 			time_curr = t;
 
 			player_.Update();
+			ai_.Update(delta_time);
 			physics_.Update(delta_time);
 
 			if (IsEnd())
@@ -235,6 +239,12 @@ HRESULT GamePlayScene::InitPhysics(){
 HRESULT GamePlayScene::InitCameraControl(){
 	this->camera_ = new Camera(player_.get_unit());
 	player_.set_camera(this->camera_);
+	return S_OK;
+}
+
+HRESULT GamePlayScene::InitAI()
+{
+	ai_.Init(unit_list_[1], unit_list_[0]);
 	return S_OK;
 }
 
