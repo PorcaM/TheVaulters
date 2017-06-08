@@ -26,3 +26,9 @@ struct ConstantBuffer
 	XMFLOAT4 vLightColor[2];
 	XMFLOAT4 vOutputColor;
 };
+
+struct Vertices {
+	XMFLOAT3 Pos;
+	XMFLOAT3 Normal;
+	XMFLOAT2 Tex;
+};

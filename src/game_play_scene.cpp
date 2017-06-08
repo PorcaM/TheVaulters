@@ -1,7 +1,6 @@
 /**
 	@file	game_play_scene.cpp
 	@date	2017/5/16
-	@author	�̼���
 	@brief
 */
 
@@ -39,6 +38,10 @@ HRESULT GamePlayScene::Init(){
 	hr = InitCameraControl();
 
 	InitAI();
+
+	hr = InitUserInterface();
+	
+	hr = InitPrevScenes();
 	
 
 	state_ = State::kPlay;
@@ -102,6 +105,11 @@ void GamePlayScene::Update() {
 }
 
 void GamePlayScene::Render() {
+	//if (intro_->getSceneNumber() != 111) {
+	//	intro_->Render();
+	//	ui_->Render(100);
+	//	return;
+	//} // End of if (IntroScene)
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color);
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
@@ -116,6 +124,7 @@ void GamePlayScene::Render() {
 void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 	// Send input data to the player
 	this->player_.HandleInput(message, wParam, lParam);
+	// this->intro_->HandleInput(message, wParam, lParam);
 
 	// Handle cheat key
 	if (message == WM_KEYDOWN)
@@ -245,6 +254,19 @@ HRESULT GamePlayScene::InitCameraControl(){
 HRESULT GamePlayScene::InitAI()
 {
 	ai_.Init(unit_list_[1], unit_list_[0]);
+	return S_OK;
+}
+
+HRESULT GamePlayScene::InitUserInterface() {
+	ui_ = new UserInterface(&constant_buffer_);
+
+	return S_OK;
+}
+
+//********************************************************//
+HRESULT GamePlayScene::InitPrevScenes() {
+	intro_ = new IntroScene(&constant_buffer_);
+
 	return S_OK;
 }
 

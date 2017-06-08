@@ -1,7 +1,7 @@
 /**
 	@file	game_play_scene.hpp
 	@date	2017/5/16
-	@author	이성준
+	@author	?�성준
 */
 
 #pragma once
@@ -20,6 +20,8 @@
 #include "unit_control.hpp"
 #include "player.hpp"
 #include "ai.hpp"
+#include "user_interface.hpp"
+#include "intro_scene.hpp"
 
 using namespace std;
 using namespace DirectX;
@@ -35,7 +37,7 @@ extern XMMATRIX                g_Projection;
 /**
 	@class	GamePlayScene
 	@datea	2017/5/16
-	@author 이성준
+	@author ?�성준
 	@brief
 */
 class GamePlayScene : public Scene
@@ -66,6 +68,10 @@ public:
 	void RenderUnitList();
 	HRESULT PushUnit(Model *model);
 
+	IntroScene* intro_;
+	HRESULT InitPrevScenes();
+	HRESULT InitUserInterface();
+
 	Camera*					camera_;
 	UnitControl*			unit_control_;
 	XMFLOAT4				vLightDirs[2];
@@ -94,6 +100,7 @@ private:
 	Physics 				physics_;
 	Player 					player_;
 	AI						ai_;
+	UserInterface* ui_;
 	float					curr_time_;
 	int						winner_id_;
 };
