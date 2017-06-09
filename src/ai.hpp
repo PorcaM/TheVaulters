@@ -14,7 +14,7 @@ class AI
 public:
 	enum Action
 	{
-		kWalk = 0, kVault, kDodge, kCloser, kFar, 
+		kWalk = 0, kVault, kCloser, kFar, 
 	};
 	enum AIType
 	{

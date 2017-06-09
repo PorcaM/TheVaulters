@@ -1,10 +1,10 @@
 /**
 	@file	utility.hpp
 	@datea	2017/5/15
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
-	@warning	Çì´õÆÄÀÏÀº ¼±¾ð¸¸ °¡Áö°í ÀÖ¾î¾ß ÇÔ 
-				(ÇÔ¼ö forwading, extern global º¯¼ö µî)
+	@warning	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿?ï¿½ï¿½ 
+				(ï¿½Ô¼ï¿½ forwading, extern global ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)
 */
 
 #pragma once
@@ -25,6 +25,7 @@ struct ConstantBuffer
 	XMFLOAT4 vLightDir[2];
 	XMFLOAT4 vLightColor[2];
 	XMFLOAT4 vOutputColor;
+	float Polish;
 };
 
 struct Vertices {

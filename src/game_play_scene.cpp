@@ -222,10 +222,11 @@ HRESULT GamePlayScene::InitUnitsLocation()
 }
 
 HRESULT GamePlayScene::InitLights(){
-	vLightDirs[0] = XMFLOAT4(-0.577f, 0.577f, -0.577f, 1.0f);
-	vLightDirs[1] = XMFLOAT4(0.0f, 0.0f, 10.0f, 1.0f);
-	vLightColors[0] = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	vLightColors[1] = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
+	//vLightDirs[0] = XMFLOAT4(-0.577f, 0.577f, -0.577f, 1.0f);
+	vLightDirs[0] = XMFLOAT4( -0.5f, 0.577f, -0.5f, 1.0f );
+	vLightDirs[1] =  XMFLOAT4( 0.0f, 0.0f, -1.0f, 1.0f );
+	vLightColors[0] = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	vLightColors[1] = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	return S_OK;
 }
 

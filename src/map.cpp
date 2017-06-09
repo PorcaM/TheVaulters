@@ -83,6 +83,8 @@ void Map::Render(ConstantBuffer *contant_buffer) {
 			XMMatrixTranspose(translationMatrix) *
 			XMMatrixTranspose(scaleMatrix) *
 			XMMatrixTranspose(g_World);
+		contant_buffer->vLightColor[1] = XMFLOAT4(0.0f, 0.1f, 0.0f, 1.0f);
+		contant_buffer->Polish = 1.0f;
 		g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, contant_buffer, 0, 0);
 		hexagon_->Render();
 	}

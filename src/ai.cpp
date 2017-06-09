@@ -30,7 +30,10 @@ AI::Action AI::Judge()
 		case AIType::kRandom:
 			if (Delay() <= 0.0f)
 			{
-				action = static_cast<Action>(rand() % 3);
+				do
+				{
+					action = static_cast<Action>(rand() % 4);
+				} while (action == Action::kFar);
 				Delay((rand() % 3) + 1.0f);
 			}
 			break;
@@ -80,7 +83,7 @@ void AI::Rotate()
 	float angle_x = atan2f(y, distance);
 	float angle_y = atan2f(target.x - base.x, target.z - base.z);
 
-	this->unit_->set_transform_rotation_x(XMConvertToDegrees(angle_x));
+	this->unit_->set_transform_rotation_x(XMConvertToDegrees(angle_x) + 10.0f);
 	this->unit_->set_transform_rotation_y(XMConvertToDegrees(angle_y));
 }
 
