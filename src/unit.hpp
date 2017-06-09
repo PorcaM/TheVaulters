@@ -68,6 +68,9 @@ public:
 	void set_transform_position_z(float position_z) { transform_.position_.z = position_z; }
 	void set_model(Model *model) { model_ = model; }
 
+	float					jump_power_ = 100.0f;
+	float					vault_power_ = 500.0f;
+
 private:
 	State 					state_;
 	Transform 				transform_;

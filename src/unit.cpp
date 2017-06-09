@@ -78,13 +78,13 @@ void Unit::Jump() {
 		return;
 
 	Rigidbody rigidbody = this->get_ridigbody();
-	rigidbody.v_.y = 300.0f;
+	rigidbody.v_.y = this->jump_power_;
 	this->set_rigidbody(rigidbody);
 	this->set_state(Unit::State::kJump);
 }
 
 void Unit::Vault(float charge) {
-	float power = 500.0f;
+	float power = this->vault_power_;
 	Rigidbody rigidbody = this->get_ridigbody();
 	Transform transform = this->get_transform();
 
