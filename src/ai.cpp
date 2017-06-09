@@ -14,6 +14,7 @@ void AI::Init(Unit* unit, Unit* enemy)
 	this->delay_ = 2.0f;
     set_unit(unit);
     set_enemy(enemy);
+	Type(AIType::kRandom);
 }
 
 void AI::Update(float delta_time)
@@ -21,21 +22,41 @@ void AI::Update(float delta_time)
 	DetermineAIAction(delta_time);
 }
 
+AI::Action AI::Judge()
+{
+	Action action = Action::kWalk;
+	switch(this->Type())
+	{
+		case AIType::kRandom:
+			if (Delay() <= 0.0f)
+			{
+				action = static_cast<Action>(rand() % 3);
+				Delay((rand() % 3) + 1.0f);
+			}
+			break;
+		default:
+
+			break;
+	}
+	return action;
+}
+
 void AI::DetermineAIAction(float delta_time)
 {
     this->delay_ -= delta_time;
-
-	if (this->delay_ <= 0)
-	{
-		this->choice_ = static_cast<Action>(rand() % 3);
-
-		//delay until next action
-		this->delay_ = (rand() % 3) + 1.0f;
-	}
 	Rotate();
-	switch (this->choice_)
+	switch (Judge())
 	{
+		case kCloser:
+			unit_->Move(Unit::Direction::kForward);
+			break;
+		case kFar:
+			unit_->Move(Unit::Direction::kBehind);
+			break;
+		case kVault:
+			unit_->Vault(100.0f);
 		default:
+			unit_->Move(static_cast<Unit::Direction>(rand() % 4));
 			unit_->Jump();
 			break;
 	}
@@ -57,18 +78,38 @@ void AI::Rotate()
 	XMStoreFloat(&distance, length);
 
 	float angle_x = atan2f(y, distance);
-	float angle_y = atan2f(target.z - base.z, target.x - base.x);
+	float angle_y = atan2f(target.x - base.x, target.z - base.z);
 
-	this->unit_->set_transform_rotation_x((angle_x));
-	this->unit_->set_transform_rotation_y((angle_y/10.0f));
+	this->unit_->set_transform_rotation_x(XMConvertToDegrees(angle_x));
+	this->unit_->set_transform_rotation_y(XMConvertToDegrees(angle_y));
+}
+
+void AI::Type(AI::AIType type)
+{
+	this->type_ = type;
+}
+
+AI::AIType AI::Type()
+{
+	return this->type_;
+}
+
+void AI::Delay(float delay)
+{
+	this->delay_ = delay;
+}
+
+float AI::Delay()
+{
+	return this->delay_;
 }
 
 void AI::set_unit(Unit *unit)
 {
-    this->unit_ = unit;
+	this->unit_ = unit;
 }
 
 void AI::set_enemy(Unit *enemy)
 {
-    this->enemy_ = enemy;
+	this->enemy_ = enemy;
 }
