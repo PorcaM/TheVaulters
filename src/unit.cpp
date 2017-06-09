@@ -1,7 +1,7 @@
 /**
 	@file	unit.cpp
 	@datea	2017/5/16
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -17,7 +17,7 @@ void Unit::Render(ConstantBuffer *constant_buffer) {
 	XMMATRIX translationMatrix	= XMMatrixTranslationFromVector(XMLoadFloat3(&position));
 	XMMATRIX scalingMatrix		= XMMatrixScalingFromVector(XMLoadFloat3(&scale));
 	XMMATRIX yawMatrix 			= XMMatrixRotationRollPitchYaw(0.0f, 
-																XMConvertToDegrees(-rotation.y)/10.0f, 
+																XMConvertToRadians(rotation.y), 
 																0.0f);
 
 	constant_buffer->mWorld = 
@@ -45,23 +45,23 @@ void Unit::Move(Direction direction) {
 	float z = 0.0f;
 	if (direction == kForward) 
 	{
-		z += speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		x += speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+		z += speed * cos(XMConvertToRadians(yaw));
+		x += speed * sin(XMConvertToRadians(yaw));
 	}
 	if (direction == kBehind) 
 	{
-		z += -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		x += -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+		z += -speed * cos(XMConvertToRadians(yaw));
+		x += -speed * sin(XMConvertToRadians(yaw));
 	}
 	if (direction == kLeft) 
 	{
-		x += -speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		z += speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+		x += -speed * cos(XMConvertToRadians(yaw));
+		z += speed * sin(XMConvertToRadians(yaw));
 	}
 	if (direction == kRight) 
 	{
-		x += speed * cos(XMConvertToDegrees(-yaw) / 10.0f);
-		z += -speed * sin(XMConvertToDegrees(-yaw) / 10.0f);
+		x += speed * cos(XMConvertToRadians(yaw));
+		z += -speed * sin(XMConvertToRadians(yaw));
 	}
 	rigidbody.v_.x = x;
 	rigidbody.v_.z = z;
@@ -88,13 +88,11 @@ void Unit::Vault(float charge) {
 	Rigidbody rigidbody = this->get_ridigbody();
 	Transform transform = this->get_transform();
 
-	float yaw = this->get_transform_rotation_y();
-	rigidbody.v_.z = power * cos(XMConvertToDegrees(-yaw) / 10.0f);
-	rigidbody.v_.x = power * sin(XMConvertToDegrees(-yaw) / 10.0f);
 	float x = this->get_transform_rotation_x();
-	float x1 = XMConvertToDegrees(x);
-	float x2 = sin(x1 / 10.0f);
-	rigidbody.v_.y = power * x2;
+	float yaw = this->get_transform_rotation_y();
+	rigidbody.v_.z = power * cos(XMConvertToRadians(yaw)) * cos(XMConvertToRadians(x));
+	rigidbody.v_.x = power * sin(XMConvertToRadians(yaw)) * cos(XMConvertToRadians(x));
+	rigidbody.v_.y = power * sin(XMConvertToRadians(x));
 
 	this->set_rigidbody(rigidbody);
 	this->set_state(Unit::State::kVault);

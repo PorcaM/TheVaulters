@@ -19,6 +19,7 @@ public:
     void Init(Unit* unit, Unit* enemy);
     void Update(float delta_time);
     void DetermineAIAction(float delta_time);
+    void Rotate();
 
     void set_unit(Unit *unit);
     void set_enemy(Unit *enemy);

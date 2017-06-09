@@ -109,18 +109,18 @@ void GamePlayScene::Render() {
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color);
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
-	if (intro_->getSceneNumber() != 111) {
-		intro_->Render();
-		ui_->Render(100);
-		return;
-	} // End of if (IntroScene)
-	else
+	//if (intro_->getSceneNumber() != 111) {
+	//	intro_->Render();
+	//	ui_->Render(100);
+	//	return;
+	//} // End of if (IntroScene)
+	//else
 	{
 		this->camera_->Update(&this->constant_buffer_);
 
 		RenderUnitList();
 		map_->Render(&this->constant_buffer_);
-		ui_->Render(100);
+		// ui_->Render(100);
 	}
 	g_pSwapChain->Present(0, 0);
 }

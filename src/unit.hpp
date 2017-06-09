@@ -1,7 +1,7 @@
 /**
 	@file	unit.hpp
 	@datea	2017/5/16
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -18,7 +18,7 @@ extern D3D_DRIVER_TYPE         g_driverType;
 /**
 	@class	Unit
 	@datea	2017/5/16
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 class Unit{
@@ -56,6 +56,8 @@ public:
 	void set_rigidbody(Rigidbody rigidbody) { rigidbody_ = rigidbody; }
 	void set_transform_position(XMFLOAT3 position) {this->transform_.position_ = position;}
 	void set_transform_rotation(XMFLOAT2 rotation) { transform_.rotation_ = rotation; }
+	void set_transform_rotation_y(float y) { this->transform_.rotation_.y = y; }
+	void set_transform_rotation_x(float x) { this->transform_.rotation_.x = x; }
 	void set_transfrom_scale(float scale) {
 		this->transform_.scale_.x = this->transform_.scale_.y =
 			this->transform_.scale_.z = scale;

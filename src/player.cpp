@@ -75,12 +75,16 @@ void Player::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 			float curr_y = HIWORD(lParam);
 
 			// Update unit rotation
-			float amount = XMConvertToDegrees(this->rotation_sensitivity_);
-			float delta_x = (curr_y - this->vm_.y) / amount;
-			float delta_y = (curr_x - this->vm_.x) / amount;
+			float amount = (this->rotation_sensitivity_) / 10.0f;
+			float delta_y = (curr_y - this->vm_.y) * amount * 0.3;
+			float delta_x = (curr_x - this->vm_.x) * amount * 0.7;
 			XMFLOAT2 rotation = this->unit_->get_transform().rotation_;
-			rotation.x -= delta_x;
-			rotation.y -= delta_y;
+			rotation.x -= delta_y;
+			if (rotation.x > 90.0f) rotation.x = 90.0f;
+			if (rotation.x < -90.0f) rotation.x = -90.0f;
+			rotation.y += delta_x;
+			if (rotation.y > 360.0f) rotation.y -= 360.0f;
+			if (rotation.y < 360.0f) rotation.y += 360.0f;
 			this->unit_->set_transform_rotation(rotation);
 
 			// Update previous values
