@@ -94,7 +94,8 @@ void GamePlayScene::Update() {
 			time_curr = t;
 
 			player_.Update();
-			ai_.Update(delta_time);
+			// ai_.Update(delta_time);
+			network_.Update();
 			physics_.Update(delta_time);
 
 			if (IsEnd())
@@ -133,6 +134,7 @@ void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
    } // End of if (IntroScene)
    else {
       this->player_.HandleInput(message, wParam, lParam);
+	  this->network_.Communication(message, wParam, lParam);
    }
 
 	// Handle cheat key
@@ -271,6 +273,7 @@ HRESULT GamePlayScene::InitAI()
 HRESULT GamePlayScene::InitNetwork()
 {
 	network_.Init();
+	network_.SetUnits(unit_list_[0], unit_list_[1]);
 	return S_OK;
 }
 
