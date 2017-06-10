@@ -259,6 +259,7 @@ HRESULT GamePlayScene::InitCameraControl(){
 HRESULT GamePlayScene::InitAI()
 {
 	ai_.Init(unit_list_[1], unit_list_[0]);
+	ai_.Type(AI::AIType::kNone);
 	return S_OK;
 }
 

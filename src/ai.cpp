@@ -37,6 +37,8 @@ AI::Action AI::Judge()
 				Delay((rand() % 3) + 1.0f);
 			}
 			break;
+		case AIType::kNone:
+			return Action::kIdle;
 		default:
 
 			break;
@@ -58,6 +60,9 @@ void AI::DetermineAIAction(float delta_time)
 			break;
 		case kVault:
 			unit_->Vault(100.0f);
+			break;
+		case kIdle:
+			break;
 		default:
 			unit_->Move(static_cast<Unit::Direction>(rand() % 4));
 			unit_->Jump();

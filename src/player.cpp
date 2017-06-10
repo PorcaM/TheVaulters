@@ -23,11 +23,31 @@ void Player::Update()
 		MessageBox(nullptr,
 			L"No assigned unit to the player.", L"Error", MB_OK);
 	}
-	if (vk_.w) this->unit_->Move(Unit::Direction::kForward);
-	if (vk_.a) this->unit_->Move(Unit::Direction::kLeft);
-	if (vk_.s) this->unit_->Move(Unit::Direction::kBehind);
-	if (vk_.d) this->unit_->Move(Unit::Direction::kRight);
-	if (vk_.space) { this->unit_->Jump(); vk_.space = false; }
+	if (vk_.w) 
+	{
+		if (vk_.a)
+			this->unit_->Move(-45.0f);
+		else if (vk_.d)
+			this->unit_->Move(45.0f);
+		else
+			this->unit_->Move(0.0f);
+	}
+	else if (vk_.s)
+	{
+		if (vk_.a)
+			this->unit_->Move(-135.0f);
+		else if (vk_.d)
+			this->unit_->Move(135.0f);
+		else
+			this->unit_->Move(180.0f);
+	}
+	else if (vk_.a) this->unit_->Move(Unit::Direction::kLeft);
+	else if (vk_.d) this->unit_->Move(Unit::Direction::kRight);
+	if (vk_.space) 
+	{ 
+		this->unit_->Jump(); 
+		vk_.space = false; 
+	}
 	if (vm_.lb) set_charge(charge_ + charge_speed_);
 }
 

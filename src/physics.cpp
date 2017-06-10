@@ -1,7 +1,7 @@
 /**
 	@file	physics.cpp
 	@date	2017/5/21
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -15,7 +15,7 @@ void Physics::Init()
 void Physics::InitPhysicalCoefficient()
 {
 	this->pc_.graviational_acceleration 	= 9.8f;
-	this->pc_.minimun_velocity 				= 0.01f;
+	this->pc_.minimun_velocity 				= 0.1f;
 	this->pc_.ground_resistance 			= 10.0f;
 }
 
@@ -71,6 +71,7 @@ void Physics::Force(float delta_time) {
 		float delta_x = rigidbody.v_.x * delta_time;
 		float delta_y = rigidbody.v_.y * delta_time;
 		float delta_z = rigidbody.v_.z * delta_time;
+		float prev_y = transform.position_.y;
 		transform.position_.x += delta_x;
 		transform.position_.y += delta_y;
 		transform.position_.z += delta_z;
@@ -82,7 +83,7 @@ void Physics::Force(float delta_time) {
 		if (fabs(rigidbody.v_.x) <= this->pc_.minimun_velocity) rigidbody.v_.x = 0;
 		if (fabs(rigidbody.v_.z) <= this->pc_.minimun_velocity) rigidbody.v_.z = 0;
 
-		if (IsTerrain(unit) && transform.position_.y < 0) {
+		if (IsTerrain(unit) && transform.position_.y < 0.0f) {
 			transform.position_.y = 0;
 			rigidbody.v_.y = 0;
 		}
@@ -91,9 +92,9 @@ void Physics::Force(float delta_time) {
 		unit->set_rigidbody(rigidbody);
 
 		// Update state if idle
-		if (rigidbody.v_.x == 0.0f &&
-			rigidbody.v_.y == 0.0f &&
-			rigidbody.v_.z == 0.0f)
+		if (fabs(rigidbody.v_.x) <= this->pc_.minimun_velocity &&
+			fabs(rigidbody.v_.y) <= this->pc_.minimun_velocity &&
+			fabs(rigidbody.v_.z) <= this->pc_.minimun_velocity)
 		{
 			unit->set_state(Unit::State::kIdle);
 		}

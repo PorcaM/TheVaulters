@@ -32,45 +32,43 @@ void Unit::Render(ConstantBuffer *constant_buffer) {
 	model_->Render();
 }
 
-void Unit::Move(Direction direction) {
+void Unit::Move(float angle)
+{
 	Unit::State state = this->get_state();
-	if (state != Unit::State::kIdle && 
+	if (state != Unit::State::kIdle &&
 		state != Unit::State::kWalk)
 		return;
 
-	Transform transform = this->get_transform();
 	Rigidbody rigidbody = this->get_ridigbody();
 	float speed = this->speed_;
 	float yaw = this->get_transform_rotation_y();
 
-	float x = 0.0f;
-	float z = 0.0f;
+	float x = speed * sin(XMConvertToRadians(yaw + angle));
+	float z = speed * cos(XMConvertToRadians(yaw + angle));
+	rigidbody.v_.x = x;
+	rigidbody.v_.z = z;
+
+	this->set_rigidbody(rigidbody);
+	this->set_state(Unit::State::kWalk);
+}
+
+void Unit::Move(Direction direction) {
 	if (direction == kForward) 
 	{
-		z += speed * cos(XMConvertToRadians(yaw));
-		x += speed * sin(XMConvertToRadians(yaw));
+		Move(0.0f);
 	}
 	if (direction == kBehind) 
 	{
-		z += -speed * cos(XMConvertToRadians(yaw));
-		x += -speed * sin(XMConvertToRadians(yaw));
+		Move(180.0f);
 	}
 	if (direction == kLeft) 
 	{
-		x += -speed * cos(XMConvertToRadians(yaw));
-		z += speed * sin(XMConvertToRadians(yaw));
+		Move(-90.0f);
 	}
 	if (direction == kRight) 
 	{
-		x += speed * cos(XMConvertToRadians(yaw));
-		z += -speed * sin(XMConvertToRadians(yaw));
+		Move(90.0f);
 	}
-	rigidbody.v_.x = x;
-	rigidbody.v_.z = z;
-	
-	this->set_rigidbody(rigidbody);
-	this->set_transform(transform);
-	this->set_state(Unit::State::kWalk);
 }
 
 void Unit::Jump() {

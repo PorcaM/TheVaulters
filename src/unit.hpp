@@ -34,6 +34,7 @@ public:
 	Unit() { state_ = State::kIdle; }
 	void Init() { rigidbody_.Init(); }
 	void Render(ConstantBuffer *constant_buffer);
+	void Move(float angle);
 	void Move(Direction direction);
 	void Jump();
 	void Vault(float charge);

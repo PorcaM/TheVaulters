@@ -14,11 +14,11 @@ class AI
 public:
 	enum Action
 	{
-		kWalk = 0, kVault, kCloser, kFar, 
+		kWalk = 0, kVault, kCloser, kFar, kIdle,
 	};
 	enum AIType
 	{
-		kRandom,
+		kRandom, kNone
 	};
 
     AI();
