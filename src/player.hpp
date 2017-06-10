@@ -1,7 +1,7 @@
 /**
 	@file	player.hpp
 	@date	2017/5/22
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -10,10 +10,12 @@
 #include "unit.hpp"
 #include "camera_control.hpp"
 
+extern HWND                    g_hWnd;
+
 /**
 	@class	Player
 	@date	2017/5/22
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 class Player {
@@ -55,4 +57,8 @@ private:
 	float						max_charge_;
 	float						rotation_sensitivity_ = 15.0f;
 
+	bool						reset_mouse_pos_ = false;
+	POINT						mouse_pos_;
+	bool						cursor_visible_ = false;
+	bool 						init_visible_ = true;
 };

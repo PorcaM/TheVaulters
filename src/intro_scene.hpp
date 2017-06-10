@@ -3,6 +3,7 @@
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include "utility.hpp"
+#include "DDSTextureLoader.h"
 
 extern ID3D11DeviceContext*    g_pImmediateContext;
 extern ID3D11VertexShader*     g_pVertexShader;
@@ -10,6 +11,10 @@ extern ID3D11PixelShader*      g_pPixelShader;
 extern ID3D11Buffer*           g_pConstantBuffer;
 extern ID3D11Device*           g_pd3dDevice;
 extern D3D_DRIVER_TYPE         g_driverType;
+extern HWND                    g_hWnd;
+
+extern ID3D11ShaderResourceView*           g_pTextureRV;
+extern ID3D11SamplerState*                 g_pSamplerLinear;
 
 class IntroScene {
 private:
@@ -17,6 +22,10 @@ private:
 	ID3D11Buffer *index_buffer_ = nullptr;
 	ConstantBuffer *cbuffer_ = nullptr;
 	int scene_number_ = 1;
+	
+	POINT pt_;
+	PAINTSTRUCT ps_;
+	HDC hdc_;
 
 	/* Prologue */
 	float time_delay_ = 3.0f;
@@ -51,4 +60,12 @@ public:
 
 	void Render();
 	void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
+
+	// if dir is true : max && false : min
+	float convertCoord(float position, float size, bool max) {
+		if (max)
+			return (position * 18.0f) + (size * 18.0f);
+		else
+			return (position * 18.0f) - (size * 18.0f);
+	}
 };

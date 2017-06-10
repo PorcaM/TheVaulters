@@ -90,21 +90,36 @@ void IntroScene::Render() {
 }
 
 void IntroScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
-	wstring message_ = L"Access succeed";// +pt.x + pt.y;
+	GetCursorPos(&pt_);
+	ScreenToClient(g_hWnd, &pt_);
+	
 	switch (message) {
-	case WM_MOUSEWHEEL:
 	case WM_LBUTTONDOWN:
-	case WM_LBUTTONUP:
-		//x_ = pt.x - (w_ / 2);
-		//y_ = pt.y - (h_ / 2);
-		click_ = true;
+		
+		// maybe 1.0f = 36px
+		x_ = pt_.x - (WINDOW_WIDTH / 2);
+		y_ = pt_.y - (WINDOW_HEIGHT / 2);
 
-		MessageBox(nullptr, message_.c_str(), L"Debug", MB_OK);
-		//MessageBox(nullptr, L" " + message, L"Debug", MB_OK);
+		if (x_ > -90.0f && x_ < 90.0f) {
+			click_ = true;
+
+			if (y_ > convertCoord(4.0f, 1.0f, false) && y_ < convertCoord(4.0f, 1.0f, true))
+				scene_number_ = 111;
+
+			else if (y_ > convertCoord(7.0f, 1.0f, false) && y_ < convertCoord(7.0f, 1.0f, true))
+				MessageBox(nullptr, L"occured 2", L"Debug", MB_OK);
+
+			else if (y_ > convertCoord(10.0f, 1.0f, false) && y_ < convertCoord(10.0f, 1.0f, true))
+				MessageBox(nullptr, L"occured 3", L"Debug", MB_OK);
+
+			else if (y_ > convertCoord(13.0f, 1.0f, false) && y_ < convertCoord(13.0f, 1.0f, true))
+				MessageBox(nullptr, L"occured 4", L"Debug", MB_OK);
+		}
+
 		break;
+
 	default:
-		//message_ = L"Access filed";
-		//MessageBox(nullptr, L" "+message, L"Debug", MB_OK);
+		
 		break;
 	}
 }
@@ -113,10 +128,10 @@ HRESULT IntroScene::drawRect(float width, float height, float x, float y) {
 	HRESULT hr = S_OK;
 
 	Vertices vertices[] = {
-		{ XMFLOAT3(1.0f,  1.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f,  1.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3( 1.0f,  1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f,  1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(0.0f, 1.0f) },
+		{ XMFLOAT3( 1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
 	};
 
 	//vertex buffer
@@ -180,6 +195,25 @@ HRESULT IntroScene::drawRect(float width, float height, float x, float y) {
 	bd.CPUAccessFlags = 0;
 	hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer);
 
+	// Load the Texture
+	hr = CreateDDSTextureFromFile(g_pd3dDevice, L"seafloor.dds", nullptr, &g_pTextureRV);
+	if (FAILED(hr))
+		return hr;
+
+	// Create the sample state
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = g_pd3dDevice->CreateSamplerState(&sampDesc, &g_pSamplerLinear);
+	if (FAILED(hr))
+		return hr;
+
 	UINT stride_ = sizeof(Vertices);
 
 	// XMMATRIX translationMatrix = XMMatrixTranslation(-1.0f, 40.0f, 5.0f);
@@ -192,8 +226,11 @@ HRESULT IntroScene::drawRect(float width, float height, float x, float y) {
 
 	XMMATRIX position = XMMatrixLookAtLH(Eye, At, Up);
 
-	//contant_buffer->vLightDir[cnt] = XMFLOAT4(x * size_ + trans_x, 10.0f, z * (size_ * 0.3f), 1.0f);
-	//contant_buffer->vLightColor[cnt] = XMFLOAT4(light_intencity, light_intencity, light_intencity, 1.0f);
+	cbuffer_->vLightDir[0] = XMFLOAT4(-0.577f, -0.577f, -0.577f, 1.0f);
+	cbuffer_->vLightDir[1] = XMFLOAT4(0.0f, 0.0f, 10.0f, 1.0f);
+	cbuffer_->vLightColor[0] = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+	cbuffer_->vLightColor[1] = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
+
 	cbuffer_->mWorld = 
 		XMMatrixTranspose(translationMatrix) *
 		XMMatrixTranspose(scaleMatrix) *

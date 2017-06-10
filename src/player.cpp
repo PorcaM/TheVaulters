@@ -91,25 +91,40 @@ void Player::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 		}
 		else 
 		{
-			float curr_x = LOWORD(lParam);
-			float curr_y = HIWORD(lParam);
+			if (reset_mouse_pos_)
+			{
+				mouse_pos_.x = WINDOW_WIDTH / 2;
+				mouse_pos_.y = WINDOW_HEIGHT / 2;
+				ClientToScreen(g_hWnd, &mouse_pos_);
+				SetCursorPos(mouse_pos_.x, mouse_pos_.y);
 
-			// Update unit rotation
-			float amount = (this->rotation_sensitivity_) / 10.0f;
-			float delta_y = (curr_y - this->vm_.y) * amount * 0.3;
-			float delta_x = (curr_x - this->vm_.x) * amount * 0.7;
-			XMFLOAT2 rotation = this->unit_->get_transform().rotation_;
-			rotation.x -= delta_y;
-			if (rotation.x > 90.0f) rotation.x = 90.0f;
-			if (rotation.x < -90.0f) rotation.x = -90.0f;
-			rotation.y += delta_x;
-			if (rotation.y > 360.0f) rotation.y -= 360.0f;
-			if (rotation.y < 360.0f) rotation.y += 360.0f;
-			this->unit_->set_transform_rotation(rotation);
+				this->vm_.x = LOWORD(lParam);
+				this->vm_.y = HIWORD(lParam);
+				reset_mouse_pos_ = false;
+			}
+			else
+			{
+				float curr_x = LOWORD(lParam);
+				float curr_y = HIWORD(lParam);
 
-			// Update previous values
-			this->vm_.x = LOWORD(lParam);
-			this->vm_.y = HIWORD(lParam);
+				// Update unit rotation
+				float amount = (this->rotation_sensitivity_) / 10.0f;
+				float delta_y = (curr_y - this->vm_.y) * amount * 0.3;
+				float delta_x = (curr_x - this->vm_.x) * amount * 0.7;
+				XMFLOAT2 rotation = this->unit_->get_transform().rotation_;
+				rotation.x += delta_y;
+				if (rotation.x > 90.0f) rotation.x = 90.0f;
+				if (rotation.x < -90.0f) rotation.x = -90.0f;
+				rotation.y -= delta_x;
+				if (rotation.y > 360.0f) rotation.y -= 360.0f;
+				if (rotation.y < 360.0f) rotation.y += 360.0f;
+				this->unit_->set_transform_rotation(rotation);
+
+				// Update previous values
+				this->vm_.x = LOWORD(lParam);
+				this->vm_.y = HIWORD(lParam);
+				reset_mouse_pos_ = true;
+			}
 		}
 		break;
 	case WM_MOUSEWHEEL:

@@ -58,6 +58,7 @@ void GamePlayScene::RenderUnitList() {
 }
 
 void GamePlayScene::Update() {
+	if (intro_->getSceneNumber() != 111) return;
 	switch(this->state_){
 		case GamePlayScene::State::kEnd:
 		{
@@ -109,12 +110,11 @@ void GamePlayScene::Render() {
 	g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, theme_.background_color);
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
-	//if (intro_->getSceneNumber() != 111) {
-	//	intro_->Render();
-	//	ui_->Render(100);
-	//	return;
-	//} // End of if (IntroScene)
-	//else
+	if (intro_->getSceneNumber() != 111) {
+		intro_->Render();
+		ui_->Render(100);
+	} // End of if (IntroScene)
+	else
 	{
 		this->camera_->Update(&this->constant_buffer_);
 
@@ -127,8 +127,12 @@ void GamePlayScene::Render() {
 
 void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 	// Send input data to the player
-	this->player_.HandleInput(message, wParam, lParam);
-	// this->intro_->HandleInput(message, wParam, lParam);
+	if (intro_->getSceneNumber() != 111) {
+      this->intro_->HandleInput(message, wParam, lParam);
+   } // End of if (IntroScene)
+   else {
+      this->player_.HandleInput(message, wParam, lParam);
+   }
 
 	// Handle cheat key
 	if (message == WM_KEYDOWN)

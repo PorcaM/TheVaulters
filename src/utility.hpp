@@ -3,7 +3,7 @@
 	@datea	2017/5/15
 	@author	�̼���
 	@brief
-	@warning	���������?���� ������ �־��?�� 
+	@warning	���������?���� ������ �־��?�� 
 				(�Լ� forwading, extern global ���� ��)
 */
 
@@ -13,6 +13,9 @@
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
+
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 
 using namespace DirectX;
 using namespace std;
