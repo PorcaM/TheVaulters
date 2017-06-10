@@ -22,6 +22,7 @@
 #include "ai.hpp"
 #include "user_interface.hpp"
 #include "intro_scene.hpp"
+#include "network.hpp"
 
 using namespace std;
 using namespace DirectX;
@@ -89,6 +90,7 @@ private:
 	HRESULT InitPhysics();
 	HRESULT InitCameraControl();
 	HRESULT InitAI();
+	HRESULT InitNetwork();
 	bool IsEnd();
 
 	Theme 					theme_;
@@ -101,6 +103,7 @@ private:
 	Player 					player_;
 	AI						ai_;
 	UserInterface* ui_;
+	Network					network_;
 	float					curr_time_;
 	int						winner_id_;
 };

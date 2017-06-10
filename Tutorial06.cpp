@@ -57,6 +57,9 @@ XMMATRIX                g_World;
 XMMATRIX                g_View;
 XMMATRIX                g_Projection;
 
+ID3D11ShaderResourceView*           g_pTextureRV = nullptr;
+ID3D11SamplerState*                 g_pSamplerLinear = nullptr;
+
 //--------------------------------------------------------------------------------------
 // Forward declarations
 //--------------------------------------------------------------------------------------
@@ -516,6 +519,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	PAINTSTRUCT ps;
 	HDC hdc;
+	TCHAR str[128];
 
 	switch (message)
 	{

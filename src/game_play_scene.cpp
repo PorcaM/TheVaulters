@@ -37,7 +37,8 @@ HRESULT GamePlayScene::Init(){
 
 	hr = InitCameraControl();
 
-	InitAI();
+	// InitAI();
+	InitNetwork();
 
 	hr = InitUserInterface();
 	
@@ -264,6 +265,12 @@ HRESULT GamePlayScene::InitAI()
 {
 	ai_.Init(unit_list_[1], unit_list_[0]);
 	ai_.Type(AI::AIType::kNone);
+	return S_OK;
+}
+
+HRESULT GamePlayScene::InitNetwork()
+{
+	network_.Init();
 	return S_OK;
 }
 
