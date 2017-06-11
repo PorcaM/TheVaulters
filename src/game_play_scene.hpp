@@ -101,6 +101,7 @@ private:
 	Map*					map_;
 	Physics 				physics_;
 	Player 					player_;
+	Player					enemy_;
 	AI						ai_;
 	UserInterface* ui_;
 	Network					network_;

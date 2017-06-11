@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "unit.hpp"
+#include "player.hpp"
 
 using namespace std;
 
@@ -45,9 +46,19 @@ public:
 		this->charge_ = charge;
 	}
 
+	// added (0611)
+	void setEnemys(Player* enemy) {
+		p_enemy_ = enemy;
+	}
+	// added line end
 private:
 	Unit*						unit_;
 	Unit*						enemy_;
+
+	// added (0611)
+	Player*						p_enemy_;
+	// added line end
+
 	VirtualKeyboard				vk_;
 	VirtualMouse				vm_;
 	float						rotation_sensitivity_ = 15.0f;

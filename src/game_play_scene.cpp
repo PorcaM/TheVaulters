@@ -204,6 +204,11 @@ HRESULT GamePlayScene::PushUnit(Model *model) {
 HRESULT GamePlayScene::InitPlayer(){
 	player_.Init();
 	player_.set_unit(unit_list_[0]);
+
+	// added (0611)
+	enemy_.Init();
+	enemy_.set_unit(unit_list_[1]);
+	// added line end
 	return S_OK;
 }
 
@@ -274,6 +279,9 @@ HRESULT GamePlayScene::InitNetwork()
 {
 	network_.Init();
 	network_.SetUnits(unit_list_[0], unit_list_[1]);
+	// added (0611)
+	network_.setEnemys(&enemy_);
+	// added line end
 	return S_OK;
 }
 
