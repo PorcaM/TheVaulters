@@ -103,7 +103,7 @@ private:
 	Player 					player_;
 	Player					enemy_;
 	AI						ai_;
-	UserInterface* ui_;
+	UserInterface*			ui_;
 	Network					network_;
 	float					curr_time_;
 	int						winner_id_;

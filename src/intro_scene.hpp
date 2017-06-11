@@ -2,7 +2,9 @@
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
+#include <vector>
 #include "utility.hpp"
+#include "rect.hpp"
 #include "DDSTextureLoader.h"
 
 extern ID3D11DeviceContext*    g_pImmediateContext;
@@ -13,36 +15,14 @@ extern ID3D11Device*           g_pd3dDevice;
 extern D3D_DRIVER_TYPE         g_driverType;
 extern HWND                    g_hWnd;
 
-extern ID3D11ShaderResourceView*           g_pTextureRV;
-extern ID3D11SamplerState*                 g_pSamplerLinear;
-
 class IntroScene {
-private:
-	ID3D11Buffer *vertex_buffer_ = nullptr;
-	ID3D11Buffer *index_buffer_ = nullptr;
-	ConstantBuffer *cbuffer_ = nullptr;
-	int scene_number_ = 1;
-	
-	POINT pt_;
-	PAINTSTRUCT ps_;
-	HDC hdc_;
-
-	/* Prologue */
-	float time_delay_ = 3.0f;
-
-	/* Menu */
-	float x_ = 0.0f;
-	float y_ = 0.0f;
-	
-	float w_ = 1280.0f;
-	float h_ = 720.0f;
-	
-	bool click_ = false;
-
-
 public:
+	typedef vector<Rect*>		RectList;
+
 	IntroScene(ConstantBuffer* cbuffer) { cbuffer_ = cbuffer; }
-	~IntroScene() {}
+	~IntroScene();
+
+	HRESULT Init();
 
 	HRESULT is_prologue();
 	HRESULT is_main_menu();
@@ -52,8 +32,6 @@ public:
 
 	HRESULT gps_select_map();
 	HRESULT gps_select_character();
-
-	HRESULT drawRect(float width, float height, float x, float y);
 	
 	void setSceneNumber(int scene_number) { scene_number_ = scene_number; }
 	int getSceneNumber() { return scene_number_; }
@@ -68,4 +46,24 @@ public:
 		else
 			return (position * 18.0f) - (size * 18.0f);
 	}
+private:
+	ID3D11Buffer	*vertex_buffer_ = nullptr;
+	ID3D11Buffer	*index_buffer_ = nullptr;
+	ConstantBuffer	*cbuffer_ = nullptr;
+	RectList		main_menu_;
+	POINT			pt_;
+
+	int scene_number_ = 1;
+
+	/* Prologue */
+	float time_delay_ = 3.0f;
+
+	/* Menu */
+	float x_ = 0.0f;
+	float y_ = 0.0f;
+
+	float w_ = 1280.0f;
+	float h_ = 720.0f;
+
+	bool click_ = false;
 };

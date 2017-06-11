@@ -118,7 +118,7 @@ void GamePlayScene::Render() {
 	
 	if (intro_->getSceneNumber() != 111) {
 		intro_->Render();
-		ui_->Render(100);
+		// ui_->Render(100);
 	} // End of if (IntroScene)
 	else
 	{
@@ -126,7 +126,7 @@ void GamePlayScene::Render() {
 
 		RenderUnitList();
 		map_->Render(&this->constant_buffer_);
-		// ui_->Render(100);
+		ui_->Render(100);
 	}
 	g_pSwapChain->Present(0, 0);
 }
@@ -316,13 +316,15 @@ HRESULT GamePlayScene::InitNetwork()
 
 HRESULT GamePlayScene::InitUserInterface() {
 	ui_ = new UserInterface(&constant_buffer_);
+	ui_->Init();
+	ui_->setUnitPos(unit_list_[0]); 
 
 	return S_OK;
 }
 
-//********************************************************//
 HRESULT GamePlayScene::InitPrevScenes() {
 	intro_ = new IntroScene(&constant_buffer_);
+	intro_->Init();
 
 	return S_OK;
 }
