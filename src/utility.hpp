@@ -28,7 +28,7 @@ struct ConstantBuffer
 	XMFLOAT4 vLightDir[2];
 	XMFLOAT4 vLightColor[2];
 	XMFLOAT4 vOutputColor;
-	float Polish;
+	int Polish;
 };
 
 struct Vertices {

@@ -25,8 +25,7 @@ void Unit::Render(ConstantBuffer *constant_buffer) {
 		XMMatrixTranspose(scalingMatrix) * 
 		XMMatrixTranspose(yawMatrix) *
 		XMMatrixTranspose(g_World);
-	constant_buffer->vLightColor[1] = XMFLOAT4(0.7f, 0.0f, 0.0f, 1.0f);
-	constant_buffer->Polish = 1.0f;
+	constant_buffer->Polish = 12;
 	g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, constant_buffer, 0, 0);
 
 	model_->Render();

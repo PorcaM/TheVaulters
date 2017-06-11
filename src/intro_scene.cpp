@@ -226,8 +226,8 @@ HRESULT IntroScene::drawRect(float width, float height, float x, float y) {
 
 	XMMATRIX position = XMMatrixLookAtLH(Eye, At, Up);
 
-	cbuffer_->vLightDir[0] = XMFLOAT4(-0.577f, -0.577f, -0.577f, 1.0f);
-	cbuffer_->vLightDir[1] = XMFLOAT4(0.0f, 0.0f, 10.0f, 1.0f);
+	// cbuffer_->vLightDir[0] = XMFLOAT4(-0.577f, -0.577f, -0.577f, 1.0f);
+	// cbuffer_->vLightDir[1] = XMFLOAT4(0.0f, 0.0f, 10.0f, 1.0f);
 	cbuffer_->vLightColor[0] = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 	cbuffer_->vLightColor[1] = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
 

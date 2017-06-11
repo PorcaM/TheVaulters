@@ -1,10 +1,3 @@
-/**
-	@file	model.cpp
-	@datea	2017/5/15
-	@author	ÀÌ¼ºÁØ
-	@brief
-*/
-
 #include "model.hpp"
 
 Model::~Model() {
@@ -83,6 +76,26 @@ HRESULT Model::InitFromObj(const wchar_t *obj_file) {
 	bd.CPUAccessFlags = 0;
 	hr = g_pd3dDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer);
 
+	// 0611
+    // Load the Texture
+    hr = CreateDDSTextureFromFile( g_pd3dDevice, L"model/t.dds", nullptr, &g_pTextureRV );
+    if( FAILED( hr ) )
+        return hr;
+
+    // Create the sample state
+    D3D11_SAMPLER_DESC sampDesc;
+    ZeroMemory( &sampDesc, sizeof(sampDesc) );
+    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    sampDesc.MinLOD = 0;
+    sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+    hr = g_pd3dDevice->CreateSamplerState( &sampDesc, &g_pSamplerLinear );
+    if( FAILED( hr ) )
+        return hr;
+
 	index_count_ = wfr.indices.size();
 	stride_ = sizeof(Vertex);
 	return S_OK;
@@ -97,5 +110,7 @@ void Model::Render() {
 	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
 	g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
 	g_pImmediateContext->PSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+	g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV );
+	g_pImmediateContext->PSSetSamplers( 0, 1, &g_pSamplerLinear );
 	g_pImmediateContext->DrawIndexed(index_count_*2, 0, 0);
 }

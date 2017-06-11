@@ -37,8 +37,8 @@ HRESULT GamePlayScene::Init(){
 
 	hr = InitCameraControl();
 
-	// InitAI();
-	InitNetwork();
+	InitAI();
+	// InitNetwork();
 
 	hr = InitUserInterface();
 	
@@ -52,9 +52,13 @@ HRESULT GamePlayScene::Init(){
 }
 
 void GamePlayScene::RenderUnitList() {
+	int i = 0;
 	for (UnitList::iterator it = unit_list_.begin();
 		it != unit_list_.end(); it++) {
+		if (i == 0) constant_buffer_.vLightColor[1] = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+		else constant_buffer_.vLightColor[1] = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 		(*it)->Render(&constant_buffer_);
+		i++;
 	}
 }
 
@@ -94,8 +98,8 @@ void GamePlayScene::Update() {
 			time_curr = t;
 
 			player_.Update();
-			// ai_.Update(delta_time);
-			network_.Update();
+			ai_.Update(delta_time);
+			// network_.Update();
 			physics_.Update(delta_time);
 
 			if (IsEnd())
@@ -134,20 +138,44 @@ void GamePlayScene::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
    } // End of if (IntroScene)
    else {
       this->player_.HandleInput(message, wParam, lParam);
-	  this->network_.Communication(message, wParam, lParam);
+	  // this->network_.Communication(message, wParam, lParam);
    }
 
 	// Handle cheat key
 	if (message == WM_KEYDOWN)
 	{
+		float speed = 0.1f;
+		XMFLOAT4 temp = constant_buffer_.vLightDir[0];
 		if (wParam == 0x31)
-		{
-			this->unit_list_[0]->set_state(Unit::State::kDead);
+		{			
+			temp.x += speed;			
 		}
 		if (wParam == 0x32)
 		{
-			this->unit_list_[1]->set_state(Unit::State::kDead);
+			temp.x -= speed;
 		}
+		if (wParam == 0x33)
+		{
+			temp.y += speed;
+		}
+		if (wParam == 0x34)
+		{
+			temp.y -= speed;
+		}if (wParam == 0x35)
+		{
+			temp.z += speed;
+		}
+		if (wParam == 0x36)
+		{
+			temp.z -= speed;
+		}
+		if (wParam == 0x37)
+		{
+			temp.z += 0;
+			// debugging
+		}
+		constant_buffer_.vLightDir[0] = temp;
+		g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &constant_buffer_, 0, 0);
 	}
 }
 
@@ -235,8 +263,8 @@ HRESULT GamePlayScene::InitUnitsLocation()
 
 HRESULT GamePlayScene::InitLights(){
 	//vLightDirs[0] = XMFLOAT4(-0.577f, 0.577f, -0.577f, 1.0f);
-	vLightDirs[0] = XMFLOAT4( -0.5f, 0.577f, -0.5f, 1.0f );
-	vLightDirs[1] =  XMFLOAT4( 0.0f, 0.0f, -1.0f, 1.0f );
+	vLightDirs[0] = XMFLOAT4( -0.5f, 0, -15, 1.0f );
+	vLightDirs[1] = XMFLOAT4(1, 1, -1, 1.0f);
 	vLightColors[0] = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
 	vLightColors[1] = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	return S_OK;
@@ -250,7 +278,8 @@ HRESULT GamePlayScene::InitConstantBuffer(){
 	constant_buffer_.vLightDir[1]	= vLightDirs[1];
 	constant_buffer_.vLightColor[0] = vLightColors[0];
 	constant_buffer_.vLightColor[1] = vLightColors[1];
-	constant_buffer_.vOutputColor	= XMFLOAT4(0, 0, 0, 0);
+	constant_buffer_.vOutputColor	= XMFLOAT4(0, 1.0f, 0.0f, 0.0f);
+	constant_buffer_.Polish			= 1.0f;
 	g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &constant_buffer_, 0, 0);
 	return S_OK;
 }

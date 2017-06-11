@@ -60,6 +60,7 @@ void Network::Communication(UINT message, WPARAM wParam, LPARAM lParam)
 
 void Network::HandleMessage(UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if (message == WM_MOUSEWHEEL) return;
 	p_enemy_->HandleInput(message, wParam, lParam);
 
 	//switch (message) {

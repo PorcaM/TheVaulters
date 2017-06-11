@@ -1,7 +1,7 @@
 /**
 	@file	map.cpp
 	@date	2017/5/16
-	@author	ÀÌ¼ºÁØ
+	@author	ï¿½Ì¼ï¿½ï¿½ï¿½
 	@brief
 */
 
@@ -83,8 +83,8 @@ void Map::Render(ConstantBuffer *contant_buffer) {
 			XMMatrixTranspose(translationMatrix) *
 			XMMatrixTranspose(scaleMatrix) *
 			XMMatrixTranspose(g_World);
-		contant_buffer->vLightColor[1] = XMFLOAT4(0.0f, 0.1f, 0.0f, 1.0f);
-		contant_buffer->Polish = 1.0f;
+		contant_buffer->vLightColor[1] = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+		contant_buffer->Polish = 1;
 		g_pImmediateContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, contant_buffer, 0, 0);
 		hexagon_->Render();
 	}

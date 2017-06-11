@@ -1,10 +1,3 @@
-/**
-	@file	model.hpp
-	@datea	2017/5/15
-	@author	이성준
-	@brief
-*/
-
 #pragma once
 
 #include <d3d11_1.h>
@@ -12,6 +5,7 @@
 #include <directxmath.h>
 #include "WaveFrontReader.h"
 #include "utility.hpp"
+#include "DDSTextureLoader.h"
 
 using namespace DirectX;
 
@@ -21,14 +15,10 @@ extern ID3D11VertexShader*     g_pVertexShader;
 extern ID3D11PixelShader*      g_pPixelShader;
 extern ID3D11Buffer*           g_pConstantBuffer;
 extern ID3D11Device*           g_pd3dDevice;
+extern ID3D11PixelShader*      g_pPixelShaderSolid;
+extern ID3D11ShaderResourceView*           g_pTextureRV;
+extern ID3D11SamplerState*                 g_pSamplerLinear;
 
-
-/**
-	@class	Model
-	@date	2017/05/15
-	@author	이성준
-	@brief	각 모델 객체들
-*/
 class Model {
 public:
 	Model() {
