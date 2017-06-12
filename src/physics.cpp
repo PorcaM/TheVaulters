@@ -157,10 +157,10 @@ bool Physics::IsTerrain(Unit *unit) {
 	// Culling
 	int length = map_->Length();
 	float r = map_->get_r();
-	float x_min = map_->get_terrain(0)->position.x - r;
-	float z_min = map_->get_terrain(0)->position.z - (r * sqrtf(3) / 2.0f);
-	float x_max = map_->get_terrain(length-1)->position.x + r;
-	float z_max = map_->get_terrain(length-1)->position.z + (r * sqrtf(3) / 2.0f);
+	float x_min = map_->min_x_ - r;
+	float z_min = map_->min_z_ - (r * sqrtf(3) / 2.0f);
+	float x_max = map_->max_x_ + r;
+	float z_max = map_->max_z_+ (r * sqrtf(3) / 2.0f);
 	if ((position.x <= x_min || position.x >= x_max) ||
 		(position.z <= z_min || position.z >= z_max))
 	{

@@ -56,12 +56,16 @@ void Map::ParseMapFile(const char *path){
 			file >> id;
 			terrain->id				= id;
 			int x = index % (this->width_  + 2);
-			int z = index / (this->height_  + 2);
+			int z = index / (this->width_  + 2);
 			float interval = this->scale_ * this->side_length_;
 			float z_offset = (interval * sqrtf(3) / 2) * (x % 2);
 			terrain->position.x 	= x * interval * 1.5f;
 			terrain->position.y 	= 0;
 			terrain->position.z 	= z * interval * sqrtf(3) + z_offset;
+			if (max_x_ < terrain->position.x) max_x_ = terrain->position.x;
+			if (max_z_ < terrain->position.z) max_z_ = terrain->position.z;
+			if (min_x_ > terrain->position.x) min_x_ = terrain->position.x;
+			if (min_z_ > terrain->position.z) min_z_ = terrain->position.z;
 		}
 	}
 

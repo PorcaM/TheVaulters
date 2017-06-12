@@ -68,6 +68,12 @@ public:
 		this->side_length_ = hexagon->XExtent();
 	}
 
+
+	float max_x_ = 0;
+	float min_x_ = 10000;
+	float max_z_ = 0;
+	float min_z_ = 10000;
+
 private:
 	int						id_;
 	int						width_;
@@ -76,6 +82,7 @@ private:
 	float					scale_;
 	float					size_;
 	float					side_length_;
+	
 	vector<Terrain*>		terrain_list_;
 	Model*					hexagon_;
 };
