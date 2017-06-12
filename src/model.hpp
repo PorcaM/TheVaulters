@@ -16,6 +16,7 @@ extern ID3D11PixelShader*      g_pPixelShader;
 extern ID3D11Buffer*           g_pConstantBuffer;
 extern ID3D11Device*           g_pd3dDevice;
 extern ID3D11PixelShader*      g_pPixelShaderSolid;
+extern ID3D11PixelShader*      g_pPixelShader2;
 extern ID3D11ShaderResourceView*           g_pTextureRV;
 extern ID3D11SamplerState*                 g_pSamplerLinear;
 
@@ -40,4 +41,6 @@ private:
 	int						index_count_;
 	UINT					stride_;
 	float					x_extent_;
+	ID3D11ShaderResourceView*			texture_;
+
 };

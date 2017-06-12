@@ -33,6 +33,6 @@ struct ConstantBuffer
 
 struct Vertices {
 	XMFLOAT3 Pos;
-	XMFLOAT2 Tex;
 	XMFLOAT3 Normal;
+	XMFLOAT2 Tex;
 };

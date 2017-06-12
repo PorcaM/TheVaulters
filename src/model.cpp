@@ -6,7 +6,7 @@ Model::~Model() {
 }
 
 HRESULT Model::InitFromObj(const wchar_t *obj_file) {
-	typedef int Index;
+	typedef UINT Index;
 	HRESULT hr = S_OK;
 	WaveFrontReader<Index> wfr;
 	typedef WaveFrontReader<Index>::Vertex Vertex;
@@ -78,7 +78,7 @@ HRESULT Model::InitFromObj(const wchar_t *obj_file) {
 
 	// 0611
     // Load the Texture
-    hr = CreateDDSTextureFromFile( g_pd3dDevice, L"model/t.dds", nullptr, &g_pTextureRV );
+    hr = CreateDDSTextureFromFile( g_pd3dDevice, L"model/t.dds", nullptr, &texture_);
     if( FAILED( hr ) )
         return hr;
 
@@ -108,9 +108,9 @@ void Model::Render() {
 	g_pImmediateContext->IASetIndexBuffer(index_buffer_, DXGI_FORMAT_R16_UINT, 0);
 	g_pImmediateContext->VSSetShader(g_pVertexShader, nullptr, 0);
 	g_pImmediateContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
-	g_pImmediateContext->PSSetShader(g_pPixelShader, nullptr, 0);
+	g_pImmediateContext->PSSetShader(g_pPixelShader2, nullptr, 0);
 	g_pImmediateContext->PSSetConstantBuffers(0, 1, &g_pConstantBuffer);
-	g_pImmediateContext->PSSetShaderResources(0, 1, &g_pTextureRV );
+	g_pImmediateContext->PSSetShaderResources(0, 1, &texture_);
 	g_pImmediateContext->PSSetSamplers( 0, 1, &g_pSamplerLinear );
 	g_pImmediateContext->DrawIndexed(index_count_*2, 0, 0);
 }
